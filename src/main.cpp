@@ -1,0 +1,16 @@
+#include <Arduino.h>
+#include <Timer.h>
+#include <EFX.h>
+
+EFX efx;
+Timer timer;
+
+void setup()
+{
+  // put your setup code here, to run once:
+}
+
+void loop()
+{
+  // put your main code here, to run repeatedly:
+}
