@@ -17,27 +17,58 @@ boolean Timer::minusCounter(byte &counter)
             counter--;
         }
     }
+
     if (counter == 0)
     {
         return true;
     }
+
     return false;
+}
+
+byte Timer::counter(byte counter, boolean invert, boolean reset)
+{
+    static boolean first;
+    static byte c;
+
+    if (reset || !first)
+    {
+        c = counter;
+        first = true;
+    }
+
+    if (minusCounter(c))
+    {
+        c = counter;
+        first = false;
+    }
+
+    if (invert)
+    {
+        return counter - c;
+    }
+    
+    else
+    {
+        return c;
+    }
 }
 
 boolean Timer::ready(byte counter, boolean reset)
 {
-    // static boolean first;
+    static boolean first;
+    static byte c;
 
-    if (reset || !first2)
+    if (reset || !first)
     {
-        count = counter;
-        first2 = true;
+        c = counter;
+        first = true;
     }
 
-    if (minusCounter(count))
+    if (minusCounter(c))
     {
-        count = counter;
-        first2 = false;
+        c = counter;
+        first = false;
         return true;
     }
 
@@ -46,6 +77,9 @@ boolean Timer::ready(byte counter, boolean reset)
 
 boolean Timer::wait(unsigned long set)
 {
+    static boolean first;
+    static unsigned long prew;
+
     if (!first)
     {
         first = true;
@@ -54,7 +88,6 @@ boolean Timer::wait(unsigned long set)
 
     if (millis() - prew >= set)
     {
-        // prew = millis();
         first = false;
         return true;
     }
@@ -64,7 +97,7 @@ boolean Timer::wait(unsigned long set)
 
 boolean Timer::alternation(unsigned long set)
 {
-    // static boolean blink;
+    static boolean blink;
 
     if (wait(set))
     {

@@ -5,7 +5,6 @@
 #include <Wire.h>
 #include <U8g2lib.h>
 #include <Timer.h>
-// #include <Vector.h>
 #include <ArduinoSTL.h>
 #include <vector>
 
@@ -15,9 +14,8 @@ using namespace std;
 class EFX : public U8G2_SH1106_128X64_NONAME_1_HW_I2C
 {
 private:
-    Timer timer;
 
-    Timer run;
+    Timer timer;
 
     unsigned long blinkMil = 500;
 
@@ -51,6 +49,7 @@ private:
         boolean moveLeft;
         boolean moveRight;
         byte start_x;
+        
         //  byte start_y;
     };
 
@@ -61,7 +60,10 @@ private:
     byte setX;
     byte setY;
 
+    const byte escapeCounter = 8;
+
 public:
+
     enum class PosX
     {
         center,
@@ -71,7 +73,6 @@ public:
         right,
         rightSpace,
         rightHalf,
-        centerFrame,
         rightFrameSide,
         rightFrameHalfSide,
         custom,
@@ -143,7 +144,7 @@ public:
 
     void mover(byte &move_x, byte deep_x, boolean &moveLeft, boolean &moveRight, byte start_x);
     void moveString(const String string, PosX pos_x, PosY pos_y, int speed = 50);
-    void escapeBar();
+    void escapeBar(boolean reset);
 
     void blinkFrame(int value, PosX pos_x, PosY pos_y, boolean tempBlock = 0, boolean dig = 0 );
 

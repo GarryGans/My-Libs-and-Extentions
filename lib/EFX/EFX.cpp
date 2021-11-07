@@ -27,10 +27,6 @@ void EFX::alignSimbols(byte W, byte H, PosX pos_x, PosY pos_y)
         x = (screenWidth - W) / 2;
         break;
 
-    case PosX::centerFrame:
-        x = (screenWidth - W) / 2 + width + width / 2;
-        break;
-
     case PosX::left:
         x = 0;
         break;
@@ -150,15 +146,11 @@ byte EFX::nextY(byte num, byte id)
 template <typename type>
 byte EFX::getDigWidth(type value)
 {
-    byte count;
+    byte count = 2;
 
-    if (value == 0)
+    if (value != 0)
     {
-        count = 1;
-    }
-    else
-    {
-        count = byte(log10(value) + 1);
+        count = byte(log10(value) + 2);
     }
 
     char val[count];
@@ -198,11 +190,6 @@ void EFX::setHeight(const uint8_t *font)
     {
         height = 18;
     }
-
-    // else
-    // {
-    // Serial.println("undefiner");
-    // }
 }
 
 void EFX::textAlign(const char *string, PosX pos_x, PosY pos_y)
@@ -353,7 +340,14 @@ void EFX::blinkFrame(int value, PosX pos_x, PosY pos_y, boolean tempBlock, boole
         {
             if (dig)
             {
-                width = getMaxCharWidth() * 2;
+                if (value < 10)
+                {
+                    width = getDigWidth(value) * 2;
+                }
+                else
+                {
+                    width = getDigWidth(value);
+                }
             }
             else
             {
@@ -473,18 +467,19 @@ void EFX::moveString(const String string, PosX pos_x, PosY pos_y, int speed)
     }
 }
 
-void EFX::escapeBar()
+void EFX::escapeBar(boolean reset)
 {
     if (!escBar)
     {
-        blockWidth = screenWidth / timer.maxEscapeCounter;
+        blockWidth = screenWidth / escapeCounter;
         escBar = true;
     }
 
-    width = blockWidth * (timer.maxEscapeCounter - timer.escapeCounter);
+    width = blockWidth * timer.counter(escapeCounter, true);
+
     drawBox(0, 58, width, 6);
 
-    if (width == blockWidth * timer.maxEscapeCounter)
+    if (width == blockWidth * escapeCounter)
     {
         escBar = false;
     }
