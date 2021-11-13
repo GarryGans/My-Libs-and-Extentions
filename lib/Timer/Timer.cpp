@@ -1,5 +1,7 @@
 #include "Timer.h"
 
+Timer timer[2];
+
 Timer::Timer()
 {
 }
@@ -10,7 +12,7 @@ Timer::~Timer()
 
 boolean Timer::minusCounter(byte &counter)
 {
-    if (wait(sec))
+    if (timer[1].wait(sec))
     {
         if (counter > 0)
         {
@@ -37,7 +39,7 @@ byte Timer::counter(byte counter, boolean invert, boolean reset)
         first = true;
     }
 
-    if (minusCounter(c))
+    if (timer[1].minusCounter(c))
     {
         c = counter;
         first = false;
@@ -47,14 +49,14 @@ byte Timer::counter(byte counter, boolean invert, boolean reset)
     {
         return counter - c;
     }
-    
+
     else
     {
         return c;
     }
 }
 
-boolean Timer::ready(byte counter, boolean reset)
+boolean Timer::ready(byte &counter, boolean reset)
 {
     static boolean first;
     static byte c;
@@ -65,9 +67,9 @@ boolean Timer::ready(byte counter, boolean reset)
         first = true;
     }
 
-    if (minusCounter(c))
+    if (timer[0].minusCounter(counter))
     {
-        c = counter;
+        counter = c;
         first = false;
         return true;
     }
@@ -77,9 +79,6 @@ boolean Timer::ready(byte counter, boolean reset)
 
 boolean Timer::wait(unsigned long set)
 {
-    static boolean first;
-    static unsigned long prew;
-
     if (!first)
     {
         first = true;
@@ -99,7 +98,7 @@ boolean Timer::alternation(unsigned long set)
 {
     static boolean blink;
 
-    if (wait(set))
+    if (timer[0].wait(set))
     {
         if (!blink)
         {

@@ -27,6 +27,10 @@ void EFX::alignSimbols(byte W, byte H, PosX pos_x, PosY pos_y)
         x = (screenWidth - W) / 2;
         break;
 
+    case PosX::centerFrame:
+        x = (screenWidth - W) / 2 + width + width / 2;
+        break;
+
     case PosX::left:
         x = 0;
         break;
@@ -63,9 +67,9 @@ void EFX::alignSimbols(byte W, byte H, PosX pos_x, PosY pos_y)
         x = setX;
         break;
 
-    case PosX::customFrame:
-        x = setX - borderW / 2;
-        break;
+        case PosX::customFrame:
+            x = setX - borderW / 2;
+            break;
 
     default:
         break;
@@ -173,7 +177,7 @@ void EFX::setHeight(const uint8_t *font)
         height = 8;
     }
 
-    else if (font == u8g2_font_pixelmordred_tf || font == u8g2_font_HelvetiPixelOutline_tr)
+    else if (font == u8g2_font_t0_12b_tf || font == u8g2_font_pixelmordred_tf || font == u8g2_font_HelvetiPixelOutline_tr)
     {
         height = 12;
     }
@@ -182,13 +186,17 @@ void EFX::setHeight(const uint8_t *font)
     {
         height = 14;
     }
-    else if (font == u8g2_font_crox5tb_tf || font == u8g2_font_crox5tb_tf)
+    else if (font == u8g2_font_crox5tb_tf || font == u8g2_font_inb16_mf || font == u8g2_font_inb16_mf )
     {
         height = 16;
     }
-    else if (font == u8g2_font_ncenB18_tf)
+    else if (font == u8g2_font_ncenB18_tf || font == u8g2_font_ncenR18_tf)
     {
         height = 18;
+    }
+    else
+    {
+        // Serial.println("un");
     }
 }
 
@@ -336,6 +344,8 @@ void EFX::blinkFrame(int value, PosX pos_x, PosY pos_y, boolean tempBlock, boole
 {
     if (!tempBlock)
     {
+        static Timer timer;
+
         if (timer.alternation(blinkMil))
         {
             if (dig)
@@ -363,6 +373,8 @@ void EFX::blinkFrame(const char *format, byte digAmount, PosX pos_x, PosY pos_y,
 {
     if (!tempBlock)
     {
+        static Timer timer;
+
         if (timer.alternation())
         {
             width = getMaxCharWidth() * digAmount;
@@ -441,10 +453,10 @@ void EFX::moveString(const String string, PosX pos_x, PosY pos_y, int speed)
 
         strMov.push_back(strNow);
         sp.push_back(spNow);
+
+        static Timer timer;
         ti.push_back(timer);
 
-        Serial.println("new");
-        Serial.println(strMov[strMov.size() - 1].string);
         id = strMov.size() - 1;
     }
 
@@ -467,19 +479,21 @@ void EFX::moveString(const String string, PosX pos_x, PosY pos_y, int speed)
     }
 }
 
-void EFX::escapeBar(boolean reset)
+void EFX::escapeBar(boolean reset, byte counter)
 {
     if (!escBar)
     {
-        blockWidth = screenWidth / escapeCounter;
+        blockWidth = screenWidth / counter;
         escBar = true;
     }
 
-    width = blockWidth * timer.counter(escapeCounter, true);
+    static Timer timer;
+
+    width = blockWidth * timer.counter(counter, true);
 
     drawBox(0, 58, width, 6);
 
-    if (width == blockWidth * escapeCounter)
+    if (width == blockWidth * counter)
     {
         escBar = false;
     }

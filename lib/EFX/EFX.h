@@ -14,9 +14,6 @@ using namespace std;
 class EFX : public U8G2_SH1106_128X64_NONAME_1_HW_I2C
 {
 private:
-
-    Timer timer;
-
     unsigned long blinkMil = 500;
 
     byte screenWidth = getWidth();
@@ -33,7 +30,7 @@ private:
 
     byte blockWidth;
 
-    boolean escBar;
+    // boolean escBar;
 
     byte id = 0;
 
@@ -49,7 +46,7 @@ private:
         boolean moveLeft;
         boolean moveRight;
         byte start_x;
-        
+
         //  byte start_y;
     };
 
@@ -61,12 +58,15 @@ private:
     byte setY;
 
     const byte escapeCounter = 8;
+    
 
 public:
+    boolean escBar;
 
     enum class PosX
     {
         center,
+        centerFrame,
         left,
         leftSpace,
         leftHalf,
@@ -144,9 +144,9 @@ public:
 
     void mover(byte &move_x, byte deep_x, boolean &moveLeft, boolean &moveRight, byte start_x);
     void moveString(const String string, PosX pos_x, PosY pos_y, int speed = 50);
-    void escapeBar(boolean reset);
+    void escapeBar(boolean reset, byte counter);
 
-    void blinkFrame(int value, PosX pos_x, PosY pos_y, boolean tempBlock = 0, boolean dig = 0 );
+    void blinkFrame(int value, PosX pos_x, PosY pos_y, boolean tempBlock = 0, boolean dig = 0);
 
     void blinkFrame(const char *format, byte digAmount, PosX pos_x, PosY pos_y, boolean tempBlock = false);
 };
