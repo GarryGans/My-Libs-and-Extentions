@@ -24,13 +24,13 @@ public:
 
     boolean minusCounter(byte &counter);
 
-    boolean wait(unsigned long set);
+    boolean wait(unsigned long set = 500);
 
     boolean alternation(unsigned long set = 500);
 
     byte counter(byte counter = 5, boolean invert = false, boolean reset = false);
 
-    boolean ready(byte &counter, boolean reset = false);
+    boolean ready(byte counter = 5, boolean reset = false);
 };
 
 #endif
