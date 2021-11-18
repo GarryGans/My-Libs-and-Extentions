@@ -15,7 +15,8 @@ private:
     boolean first;
     unsigned long prew;
 
-    
+     boolean f;
+     byte c;
 
 public:
 
@@ -30,7 +31,7 @@ public:
 
     byte counter(byte counter = 5, boolean invert = false, boolean reset = false);
 
-    boolean ready(byte counter = 5, boolean reset = false);
+    boolean ready(byte &counter, boolean reset = false);
 };
 
 #endif

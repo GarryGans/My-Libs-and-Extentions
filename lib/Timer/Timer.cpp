@@ -56,20 +56,26 @@ byte Timer::counter(byte counter, boolean invert, boolean reset)
     }
 }
 
-boolean Timer::ready(byte counter, boolean reset)
+boolean Timer::ready(byte &counter, boolean reset)
 {
-    static boolean first;
-    static byte c;
+    // static boolean first;
+    // static byte c;
 
-    if (reset || !first)
+    if (!f)
     {
         c = counter;
-        first = true;
+        f = true;
     }
 
-    if (t[0].minusCounter(c))
+    else if (reset)
     {
-        first = false;
+        counter = c;
+    }
+
+    if (t[0].minusCounter(counter))
+    {
+        counter = c;
+        f = false;
         return true;
     }
 
