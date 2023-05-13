@@ -7,7 +7,7 @@ Timer timer;
 
 void setup()
 {
-  // put your setup code here, to run once:
+  efx.begin();
 }
 
 void loop()
