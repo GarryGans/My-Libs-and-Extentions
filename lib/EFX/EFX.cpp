@@ -67,9 +67,9 @@ void EFX::alignSimbols(byte W, byte H, PosX pos_x, PosY pos_y)
         x = setX;
         break;
 
-        case PosX::customFrame:
-            x = setX - borderW / 2;
-            break;
+    case PosX::customFrame:
+        x = setX - borderW / 2;
+        break;
 
     default:
         break;
@@ -186,7 +186,7 @@ void EFX::setHeight(const uint8_t *font)
     {
         height = 14;
     }
-    else if (font == u8g2_font_crox5tb_tf || font == u8g2_font_inb16_mf || font == u8g2_font_inb16_mf )
+    else if (font == u8g2_font_crox5tb_tf || font == u8g2_font_inb16_mf || font == u8g2_font_inb16_mf)
     {
         height = 16;
     }
@@ -288,22 +288,16 @@ void EFX::strDigAlign(const String string, byte dig, PosX pos_x, PosY pos_y)
     print(dig);
 }
 
-template <typename type>
-void EFX::digAlign(type dig, PosX pos_x, PosY pos_y)
-{
-    alignSimbols(getDigWidth(dig), height, pos_x, pos_y);
 
-    setCursor(x, y);
-    print(dig);
-}
+// template <typename type>
+// void EFX::digAlign(type dig, PosX pos_x, PosY pos_y)
+// {
+//     alignSimbols(getDigWidth(dig), height, pos_x, pos_y);
 
-void EFX::digAlign(byte dig, PosX pos_x, PosY pos_y)
-{
-    alignSimbols(getDigWidth(dig), height, pos_x, pos_y);
+//     setCursor(x, y);
+//     print(dig);
+// }
 
-    setCursor(x, y);
-    print(dig);
-}
 
 void EFX::setPosition(const char *format, PosX pos_x, PosY pos_y)
 {

@@ -5,6 +5,8 @@
 EFX efx;
 Timer timer;
 
+int x = 38;
+
 void setup()
 {
   efx.begin();
@@ -12,5 +14,10 @@ void setup()
 
 void loop()
 {
-  // put your main code here, to run repeatedly:
+  efx.firstPage();
+  do
+  {
+    efx.digAlign(x, EFX::PosX::leftHalf, EFX::PosY::center);
+    // byte y = efx.getDigWidth(38);
+  } while (efx.nextPage());
 }
