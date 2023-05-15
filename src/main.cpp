@@ -5,7 +5,7 @@
 EFX efx;
 Timer timer;
 
-int x = 38;
+// byte x = 38;
 
 void setup()
 {
@@ -17,7 +17,6 @@ void loop()
   efx.firstPage();
   do
   {
-    efx.digAlign(x, EFX::PosX::leftHalf, EFX::PosY::center);
-    // byte y = efx.getDigWidth(38);
+    efx.digAlign<byte>(38, EFX::PosX::leftHalf, EFX::PosY::center);
   } while (efx.nextPage());
 }

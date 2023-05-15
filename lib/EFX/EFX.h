@@ -128,18 +128,8 @@ public:
     void strDigAlign(const char *string, byte dig, PosX pos_x, PosY pos_y);
     void strDigAlign(const String string, byte dig, PosX pos_x, PosY pos_y);
 
-
-    // template <typename type>
-    // void digAlign(type dig, PosX pos_x, PosY pos_y);
-
     template <typename type>
-    void digAlign(type dig, PosX pos_x, PosY pos_y)
-    {
-        alignSimbols(getDigWidth(dig), height, pos_x, pos_y);
-
-        setCursor(x, y);
-        print(dig);
-    }
+    void digAlign(type dig, PosX pos_x, PosY pos_y);
 
     void setPosition(const char *format, PosX pos_x, PosY pos_y);
     void setPosition(const String format, PosX pos_x, PosY pos_y);

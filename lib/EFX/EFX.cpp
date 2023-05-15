@@ -288,16 +288,20 @@ void EFX::strDigAlign(const String string, byte dig, PosX pos_x, PosY pos_y)
     print(dig);
 }
 
+template <typename type>
+void EFX::digAlign(type dig, PosX pos_x, PosY pos_y)
+{
+    alignSimbols(getDigWidth(dig), height, pos_x, pos_y);
 
-// template <typename type>
-// void EFX::digAlign(type dig, PosX pos_x, PosY pos_y)
-// {
-//     alignSimbols(getDigWidth(dig), height, pos_x, pos_y);
+    setCursor(x, y);
+    print(dig);
+}
 
-//     setCursor(x, y);
-//     print(dig);
-// }
+template void EFX::digAlign<byte>(byte, PosX, PosY);
 
+template void EFX::digAlign<int>(int, PosX, PosY);
+
+template void EFX::digAlign<double>(double, PosX, PosY);
 
 void EFX::setPosition(const char *format, PosX pos_x, PosY pos_y)
 {
