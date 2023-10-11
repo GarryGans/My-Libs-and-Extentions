@@ -126,4 +126,11 @@ boolean Timer::alternation(unsigned long set)
     }
 
     return blink;
+
+    // if (t[0].wait(set))
+    // {
+    //     return true;
+    // }
+
+    // return false;
 }
