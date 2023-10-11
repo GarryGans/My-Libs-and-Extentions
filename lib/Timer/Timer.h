@@ -2,15 +2,15 @@
 #define TIMER_H
 
 #include <Arduino.h>
-#include <ArduinoSTL.h>
-#include <vector>
+// #include <ArduinoSTL.h>
+// #include <vector>
 
 using namespace std;
 
 class Timer
 {
 private:
-    unsigned long sec = 1024;
+    unsigned long sec = 1000;
 
     boolean first;
     unsigned long prew;
@@ -28,6 +28,8 @@ public:
     boolean wait(unsigned long set = 500);
 
     boolean alternation(unsigned long set = 500);
+
+    byte upCounter(byte &counter);
 
     byte counter(byte counter = 5, boolean invert = false, boolean reset = false);
 

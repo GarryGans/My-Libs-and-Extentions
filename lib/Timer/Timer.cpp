@@ -28,6 +28,16 @@ boolean Timer::minusCounter(byte &counter)
     return false;
 }
 
+byte Timer::upCounter(byte &counter)
+{
+    if (t[2].wait(sec))
+    {
+        counter++;
+    }
+
+    return counter;
+}
+
 byte Timer::counter(byte counter, boolean invert, boolean reset)
 {
     static boolean first;
