@@ -10,8 +10,8 @@
 
 using namespace std;
 
-// class EFX : public U8G2_SSD1306_128X64_NONAME_1_HW_I2C
-class EFX : public U8G2_SH1106_128X64_NONAME_1_HW_I2C
+class EFX : public U8G2_SSD1306_128X64_NONAME_1_HW_I2C
+// class EFX : public U8G2_SH1106_128X64_NONAME_1_HW_I2C
 {
 private:
     unsigned long blinkMil = 500;

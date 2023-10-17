@@ -1,7 +1,5 @@
 #include "Timer.h"
 
-Timer t[2];
-
 Timer::Timer()
 {
 }
@@ -12,7 +10,7 @@ Timer::~Timer()
 
 boolean Timer::minusCounter(byte &counter)
 {
-    if (t[1].wait(sec))
+    if (wait(sec))
     {
         if (counter > 0)
         {
@@ -28,9 +26,9 @@ boolean Timer::minusCounter(byte &counter)
     return false;
 }
 
-byte Timer::upCounter(byte &counter)
+byte Timer::plusCounter(byte &counter)
 {
-    if (t[2].wait(sec))
+    if (wait(sec))
     {
         counter++;
     }
@@ -49,7 +47,7 @@ byte Timer::counter(byte counter, boolean invert, boolean reset)
         first = true;
     }
 
-    if (t[1].minusCounter(c))
+    if (minusCounter(c))
     {
         c = counter;
         first = false;
@@ -68,24 +66,24 @@ byte Timer::counter(byte counter, boolean invert, boolean reset)
 
 boolean Timer::ready(byte &counter, boolean reset)
 {
-    // static boolean first;
-    // static byte c;
+    static boolean first;
+    static byte firstCount;
 
-    if (!f)
+    if (!first)
     {
-        c = counter;
-        f = true;
+        firstCount = counter;
+        first = true;
     }
 
-    else if (reset)
+    if (reset)
     {
-        counter = c;
+        counter = firstCount;
     }
 
-    if (t[0].minusCounter(counter))
+    if (minusCounter(counter))
     {
-        counter = c;
-        f = false;
+        counter = firstCount;
+        first = false;
         return true;
     }
 
@@ -94,6 +92,8 @@ boolean Timer::ready(byte &counter, boolean reset)
 
 boolean Timer::wait(unsigned long set)
 {
+    // static boolean first;
+
     if (!first)
     {
         first = true;
@@ -113,7 +113,7 @@ boolean Timer::alternation(unsigned long set)
 {
     static boolean blink;
 
-    if (t[0].wait(set))
+    if (wait(set))
     {
         if (!blink)
         {

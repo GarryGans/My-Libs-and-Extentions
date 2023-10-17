@@ -12,24 +12,21 @@ class Timer
 private:
     unsigned long sec = 1000;
 
-    boolean first;
     unsigned long prew;
 
-     boolean f;
-     byte c;
+    boolean first;
+    byte firstCount;
 
 public:
-
     Timer();
     ~Timer();
 
     boolean minusCounter(byte &counter);
+    byte plusCounter(byte &counter);
 
     boolean wait(unsigned long set = 500);
 
     boolean alternation(unsigned long set = 500);
-
-    byte upCounter(byte &counter);
 
     byte counter(byte counter = 5, boolean invert = false, boolean reset = false);
 
