@@ -8,7 +8,35 @@ Timer::~Timer()
 {
 }
 
-boolean Timer::minusCounter(byte &counter)
+boolean Timer::wait(unsigned long set, boolean reset)
+{
+    // static boolean first;  ////// DON'T WORK STATIC
+
+    if (!first || reset)
+    {
+        first = true;
+        prew = millis();
+        // Serial.println("first");
+    }
+
+    if (millis() - prew >= set)
+    {
+        // Serial.print(millis() - prew);
+        // Serial.println("   millis() - prew");
+
+        // Serial.print("set: ");
+        // Serial.println(set);
+
+        first = false;
+        return true;
+    }
+
+    // Serial.println("reset");
+
+    return false;
+}
+
+boolean Timer::minusReady(byte &counter)
 {
     if (wait(sec))
     {
@@ -47,7 +75,7 @@ byte Timer::counter(byte counter, boolean invert, boolean reset)
         first = true;
     }
 
-    if (minusCounter(c))
+    if (minusReady(c))
     {
         c = counter;
         first = false;
@@ -64,73 +92,19 @@ byte Timer::counter(byte counter, boolean invert, boolean reset)
     }
 }
 
-boolean Timer::ready(byte &counter, boolean reset)
+boolean Timer::ready(byte counter, boolean reset)
 {
-    static boolean first;
-    static byte firstCount;
-
-    if (!first)
-    {
-        firstCount = counter;
-        first = true;
-    }
-
-    if (reset)
-    {
-        counter = firstCount;
-    }
-
-    if (minusCounter(counter))
-    {
-        counter = firstCount;
-        first = false;
-        return true;
-    }
-
-    return false;
+    return wait(counter * sec, reset);
 }
 
-boolean Timer::wait(unsigned long set)
-{
-    // static boolean first;
-
-    if (!first)
-    {
-        first = true;
-        prew = millis();
-    }
-
-    if (millis() - prew >= set)
-    {
-        first = false;
-        return true;
-    }
-
-    return false;
-}
-
-boolean Timer::alternation(unsigned long set)
+boolean Timer::blink(unsigned long set)
 {
     static boolean blink;
 
     if (wait(set))
     {
-        if (!blink)
-        {
-            blink = true;
-        }
-        else
-        {
-            blink = false;
-        }
+        !blink ? blink = true : blink = false;
     }
 
     return blink;
-
-    // if (t[0].wait(set))
-    // {
-    //     return true;
-    // }
-
-    // return false;
 }

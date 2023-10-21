@@ -344,7 +344,7 @@ void EFX::blinkFrame(int value, PosX pos_x, PosY pos_y, boolean tempBlock, boole
     {
         static Timer timer;
 
-        if (timer.alternation(blinkMil))
+        if (timer.blink(blinkMil))
         {
             if (dig)
             {
@@ -373,7 +373,7 @@ void EFX::blinkFrame(const char *format, byte digAmount, PosX pos_x, PosY pos_y,
     {
         static Timer timer;
 
-        if (timer.alternation())
+        if (timer.blink())
         {
             width = getMaxCharWidth() * digAmount;
 
