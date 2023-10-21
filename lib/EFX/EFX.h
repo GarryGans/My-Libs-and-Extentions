@@ -142,7 +142,7 @@ public:
 
     void mover(byte &move_x, byte deep_x, boolean &moveLeft, boolean &moveRight, byte start_x);
     void moveString(const String string, PosX pos_x, PosY pos_y, int speed = 50);
-    void escapeBar(boolean reset, byte counter);
+    void escapeBar(boolean reset, byte counter, int sec = 1000);
 
     void blinkFrame(int value, PosX pos_x, PosY pos_y, boolean tempBlock = 0, boolean dig = 0);
 

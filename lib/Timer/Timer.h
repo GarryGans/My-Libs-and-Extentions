@@ -10,7 +10,7 @@
 class Timer
 {
 private:
-    unsigned long sec = 1000;
+    unsigned long second = 1000;
 
     unsigned long prew;
 
@@ -26,13 +26,13 @@ public:
 
     byte plusCounter(byte &counter);
 
-    byte reduceCounter(byte counter, boolean reset);
+    byte reduceCounter(byte counter, boolean reset, int sec = 1000);
 
-    byte restoreCounter(byte counter, boolean reset = false);
+    byte restoreCounter(byte counter, boolean reset = false, int sec = 1000);
+
+    byte counter(byte counter, boolean increase = false, boolean reset = false, int sec = 1000);
 
     boolean blink(unsigned long set = 500);
-
-    byte counter(byte counter = 5, boolean increase = false, boolean reset = false);
 
     boolean ready(byte counter, boolean reset = false);
 };

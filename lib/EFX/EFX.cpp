@@ -477,7 +477,7 @@ void EFX::moveString(const String string, PosX pos_x, PosY pos_y, int speed)
     }
 }
 
-void EFX::escapeBar(boolean reset, byte counter)
+void EFX::escapeBar(boolean reset, byte counter, int sec)
 {
     if (!escBar)
     {
@@ -492,7 +492,7 @@ void EFX::escapeBar(boolean reset, byte counter)
 
     boolean increase = false;
 
-    amount = timer.counter(counter, increase, reset);
+    amount = timer.counter(counter, increase, reset, sec);
 
     width = blockWidth * amount;
 
@@ -500,17 +500,11 @@ void EFX::escapeBar(boolean reset, byte counter)
 
     if (!increase && amount == 0)
     {
-        Serial.print("width reduce: ");
-        Serial.println(width);
-
         escBar = false;
     }
 
     if (increase && amount == counter)
-    {        
-        Serial.print("width increase: ");
-        Serial.println(width);
-
+    {
         escBar = false;
     }
 }
