@@ -482,17 +482,35 @@ void EFX::escapeBar(boolean reset, byte counter)
     if (!escBar)
     {
         blockWidth = screenWidth / counter;
+
         escBar = true;
     }
 
     static Timer timer;
 
-    width = blockWidth * timer.counter(counter, true);
+    static byte amount;
+
+    boolean increase = false;
+
+    amount = timer.counter(counter, increase, reset);
+
+    width = blockWidth * amount;
 
     drawBox(0, 58, width, 6);
 
-    if (width == blockWidth * counter)
+    if (!increase && amount == 0)
     {
+        Serial.print("width reduce: ");
+        Serial.println(width);
+
+        escBar = false;
+    }
+
+    if (increase && amount == counter)
+    {        
+        Serial.print("width increase: ");
+        Serial.println(width);
+
         escBar = false;
     }
 }

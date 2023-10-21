@@ -15,21 +15,24 @@ private:
     unsigned long prew;
 
     boolean first;
-    byte firstCount;
 
 public:
     Timer();
     ~Timer();
 
-    boolean minusReady(byte &counter);
+    boolean wait(unsigned long set = 500, boolean reset = false);
+
+    byte minusCounter(byte &counter);
 
     byte plusCounter(byte &counter);
 
-    boolean wait(unsigned long set = 500, boolean reset = false);
+    byte reduceCounter(byte counter, boolean reset);
+
+    byte restoreCounter(byte counter, boolean reset = false);
 
     boolean blink(unsigned long set = 500);
 
-    byte counter(byte counter = 5, boolean invert = false, boolean reset = false);
+    byte counter(byte counter = 5, boolean increase = false, boolean reset = false);
 
     boolean ready(byte counter, boolean reset = false);
 };

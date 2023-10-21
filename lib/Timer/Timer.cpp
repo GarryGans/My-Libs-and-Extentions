@@ -16,27 +16,18 @@ boolean Timer::wait(unsigned long set, boolean reset)
     {
         first = true;
         prew = millis();
-        // Serial.println("first");
     }
 
     if (millis() - prew >= set)
     {
-        // Serial.print(millis() - prew);
-        // Serial.println("   millis() - prew");
-
-        // Serial.print("set: ");
-        // Serial.println(set);
-
         first = false;
         return true;
     }
 
-    // Serial.println("reset");
-
     return false;
 }
 
-boolean Timer::minusReady(byte &counter)
+byte Timer::minusCounter(byte &counter)
 {
     if (wait(sec))
     {
@@ -46,12 +37,7 @@ boolean Timer::minusReady(byte &counter)
         }
     }
 
-    if (counter == 0)
-    {
-        return true;
-    }
-
-    return false;
+    return counter;
 }
 
 byte Timer::plusCounter(byte &counter)
@@ -64,31 +50,49 @@ byte Timer::plusCounter(byte &counter)
     return counter;
 }
 
-byte Timer::counter(byte counter, boolean invert, boolean reset)
+byte Timer::reduceCounter(byte counter, boolean reset)
 {
-    static boolean first;
-    static byte c;
+    static byte tempCounter;
 
-    if (reset || !first)
+    if ((tempCounter == 0 && wait(sec)) || reset)
     {
-        c = counter;
-        first = true;
+        tempCounter = counter;
     }
 
-    if (minusReady(c))
+    if (wait(sec) && tempCounter > 0)
     {
-        c = counter;
-        first = false;
+        tempCounter--;
     }
 
-    if (invert)
+    return tempCounter;
+}
+
+byte Timer::restoreCounter(byte counter, boolean reset)
+{
+    static byte tempCounter;
+
+    if ((tempCounter == counter && wait(sec)) || reset)
     {
-        return counter - c;
+        tempCounter = 0;
     }
 
+    if (wait(sec) && tempCounter < counter)
+    {
+        tempCounter++;
+    }
+
+    return tempCounter;
+}
+
+byte Timer::counter(byte counter, boolean increase, boolean reset)
+{
+    if (increase)
+    {
+        return restoreCounter(counter, reset);
+    }
     else
     {
-        return c;
+        return reduceCounter(counter, reset);
     }
 }
 
