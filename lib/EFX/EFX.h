@@ -10,11 +10,13 @@
 
 using namespace std;
 
-class EFX : public U8G2_SSD1306_128X64_NONAME_1_HW_I2C
-// class EFX : public U8G2_SH1106_128X64_NONAME_1_HW_I2C
+// class EFX : public U8G2_SSD1306_128X64_NONAME_1_HW_I2C
+class EFX : public U8G2_SH1106_128X64_NONAME_1_HW_I2C
 {
 private:
     unsigned long blinkMil = 500;
+
+    const byte escapeCounter = 8;
 
     byte screenWidth = getWidth();
     byte screenHeight = getHeight();
@@ -46,6 +48,7 @@ private:
         boolean moveLeft;
         boolean moveRight;
         byte start_x;
+        byte padding;
 
         //  byte start_y;
     };
@@ -56,8 +59,6 @@ private:
 
     byte setX;
     byte setY;
-
-    const byte escapeCounter = 8;
 
 public:
     boolean escBar;
@@ -132,7 +133,7 @@ public:
     void digAlign(type dig, PosX pos_x, PosY pos_y);
 
     void setPosition(const char *format, PosX pos_x, PosY pos_y);
-    void setPosition(const String format, PosX pos_x, PosY pos_y);
+    void setPositionMoveStr(const String format, PosX pos_x, PosY pos_y);
 
     void textAlign(const char *string, PosX pos_x, PosY pos_y);
 
@@ -140,8 +141,8 @@ public:
 
     void setHeight(const uint8_t *font);
 
-    void mover(byte &move_x, byte deep_x, boolean &moveLeft, boolean &moveRight, byte start_x);
-    void moveString(const String string, PosX pos_x, PosY pos_y, int speed = 50);
+    void mover(byte start_x, byte &move_x, byte deep_x, boolean &moveLeft, boolean &moveRight);
+    void moveString(const String string, PosX pos_x, PosY pos_y, byte padding = 0, int speed = 50);
     void escapeBar(boolean reset, byte counter, int sec = 1000);
 
     void blinkFrame(int value, PosX pos_x, PosY pos_y, boolean tempBlock = 0, boolean dig = 0);

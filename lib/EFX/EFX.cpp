@@ -1,7 +1,7 @@
 #include "EFX.h"
 
-EFX::EFX() : U8G2_SSD1306_128X64_NONAME_1_HW_I2C(U8G2_R0, /* reset=*/U8X8_PIN_NONE)
-// EFX::EFX() : U8G2_SH1106_128X64_NONAME_1_HW_I2C(U8G2_R0, /* reset=*/U8X8_PIN_NONE)
+// EFX::EFX() : U8G2_SSD1306_128X64_NONAME_1_HW_I2C(U8G2_R0, /* reset=*/U8X8_PIN_NONE)
+EFX::EFX() : U8G2_SH1106_128X64_NONAME_1_HW_I2C(U8G2_R0, /* reset=*/U8X8_PIN_NONE)
 {
 }
 
@@ -310,7 +310,7 @@ void EFX::setPosition(const char *format, PosX pos_x, PosY pos_y)
     setCursor(x, y);
 }
 
-void EFX::setPosition(const String format, PosX pos_x, PosY pos_y)
+void EFX::setPositionMoveStr(const String format, PosX pos_x, PosY pos_y)
 {
     char str[format.length() + 1];
     String(format).toCharArray(str, format.length() + 1);
@@ -390,21 +390,24 @@ void EFX::blinkFrame(const char *format, byte digAmount, PosX pos_x, PosY pos_y,
     }
 }
 
-void EFX::mover(byte &move_x, byte deep_x, boolean &moveLeft, boolean &moveRight, byte start_x)
+void EFX::mover(byte start_x, byte &move_x, byte padding, boolean &moveLeft, boolean &moveRight)
 {
     if (moveLeft)
     {
         move_x--;
-        if (move_x == start_x - deep_x)
+
+        if (move_x == padding)
         {
             moveLeft = false;
             moveRight = true;
         }
     }
+    
     else if (moveRight)
     {
         move_x++;
-        if (move_x == deep_x + start_x)
+        
+        if (move_x == padding + padding)
         {
             moveRight = false;
             moveLeft = true;
@@ -432,7 +435,7 @@ bool EFX::moveStr::operator==(const moveStr &s) const
     return (string == s.string && pos_x == s.pos_x && pos_y == s.pos_y && speed == s.speed);
 }
 
-void EFX::moveString(const String string, PosX pos_x, PosY pos_y, int speed)
+void EFX::moveString(const String string, PosX pos_x, PosY pos_y, byte padding, int speed)
 {
     moveStr strNow = {string, pos_x, pos_y, speed};
 
@@ -458,14 +461,24 @@ void EFX::moveString(const String string, PosX pos_x, PosY pos_y, int speed)
         id = strMov.size() - 1;
     }
 
-    setPosition(string, pos_x, pos_y);
+    setPositionMoveStr(string, pos_x, pos_y);
 
     if (!sp[id].move)
     {
         sp[id].move = true;
         sp[id].move_x = sp[id].start_x = x;
+
+        sp[id].padding = padding;
+        // sp[id].padding = sp[id].start_x;
+
         sp[id].moveLeft = true;
         sp[id].moveRight = false;
+
+        if (sp[id].padding > sp[id].start_x)
+        {
+            // sp[id].move_x = sp[id].start_x = padding;
+            sp[id].padding = sp[id].start_x;
+        }
     }
 
     setCursor(sp[id].move_x, y);
@@ -473,7 +486,7 @@ void EFX::moveString(const String string, PosX pos_x, PosY pos_y, int speed)
 
     if (ti[id].wait(speed))
     {
-        mover(sp[id].move_x, sp[id].start_x, sp[id].moveLeft, sp[id].moveRight, sp[id].start_x);
+        mover(sp[id].start_x, sp[id].move_x, sp[id].padding, sp[id].moveLeft, sp[id].moveRight);
     }
 }
 
