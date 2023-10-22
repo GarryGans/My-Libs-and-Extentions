@@ -14,6 +14,9 @@ using namespace std;
 class EFX : public U8G2_SH1106_128X64_NONAME_1_HW_I2C
 {
 private:
+    // Timer timer;
+    // byte amount;
+
     unsigned long blinkMil = 500;
 
     const byte escapeCounter = 8;
@@ -32,8 +35,6 @@ private:
 
     byte blockWidth;
 
-    // boolean escBar;
-
     byte id = 0;
 
     int icon;
@@ -41,6 +42,27 @@ private:
     int unlock = 68;
     byte WH = 48;
 
+    // struct stringPoint
+    // {
+    //     byte move_x;
+    //     boolean move;
+    //     boolean moveLeft;
+    //     boolean moveRight;
+    //     byte start_x;
+    //     byte padding;
+    //     byte deep_x;
+
+    //     //  byte start_y;
+    // };
+
+    // vector<stringPoint> sp;
+
+    vector<Timer> ti;
+
+    byte setX;
+    byte setY;
+
+public:
     struct stringPoint
     {
         byte move_x;
@@ -49,18 +71,13 @@ private:
         boolean moveRight;
         byte start_x;
         byte padding;
+        byte deep_x;
 
         //  byte start_y;
     };
 
     vector<stringPoint> sp;
 
-    vector<Timer> ti;
-
-    byte setX;
-    byte setY;
-
-public:
     boolean escBar;
 
     enum class PosX
@@ -141,9 +158,10 @@ public:
 
     void setHeight(const uint8_t *font);
 
-    void mover(byte start_x, byte &move_x, byte deep_x, boolean &moveLeft, boolean &moveRight);
-    void moveString(const String string, PosX pos_x, PosY pos_y, byte padding = 0, int speed = 50);
-    void escapeBar(boolean reset, byte counter, int sec = 1000);
+    void mover(stringPoint &sp);
+
+    void moveString(const String string, PosX pos_x, PosY pos_y, byte deep_x = 0, byte padding = 0, int speed = 50);
+    void escapeBar(boolean reset, byte counter, boolean &escape, boolean increase, int sec = 1000);
 
     void blinkFrame(int value, PosX pos_x, PosY pos_y, boolean tempBlock = 0, boolean dig = 0);
 

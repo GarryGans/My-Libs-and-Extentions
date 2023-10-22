@@ -390,27 +390,36 @@ void EFX::blinkFrame(const char *format, byte digAmount, PosX pos_x, PosY pos_y,
     }
 }
 
-void EFX::mover(byte start_x, byte &move_x, byte padding, boolean &moveLeft, boolean &moveRight)
+void EFX::mover(stringPoint &sp)
 {
-    if (moveLeft)
+    if (sp.moveLeft)
     {
-        move_x--;
+        // if (sp.move_x > 0)
+        // {
+        //     sp.move_x--;
+        // }
 
-        if (move_x == padding)
+        sp.move_x--;
+
+        if (sp.move_x == sp.start_x - sp.deep_x)
         {
-            moveLeft = false;
-            moveRight = true;
+            sp.moveLeft = false;
+            sp.moveRight = true;
         }
     }
-    
-    else if (moveRight)
+
+    else if (sp.moveRight)
     {
-        move_x++;
-        
-        if (move_x == padding + padding)
+        // if (sp.move_x < sp.start_x + sp.deep_x)
+        // {
+        //     sp.move_x++;
+        // }
+        sp.move_x++;
+
+        if (sp.move_x == sp.start_x + sp.deep_x)
         {
-            moveRight = false;
-            moveLeft = true;
+            sp.moveRight = false;
+            sp.moveLeft = true;
         }
     }
 }
@@ -435,7 +444,7 @@ bool EFX::moveStr::operator==(const moveStr &s) const
     return (string == s.string && pos_x == s.pos_x && pos_y == s.pos_y && speed == s.speed);
 }
 
-void EFX::moveString(const String string, PosX pos_x, PosY pos_y, byte padding, int speed)
+void EFX::moveString(const String string, PosX pos_x, PosY pos_y, byte deep_x, byte padding, int speed)
 {
     moveStr strNow = {string, pos_x, pos_y, speed};
 
@@ -444,6 +453,9 @@ void EFX::moveString(const String string, PosX pos_x, PosY pos_y, byte padding, 
         if (strMov[i] == strNow)
         {
             id = i;
+
+            // Serial.print("old string:");
+            // Serial.println(id);
         }
     }
 
@@ -459,6 +471,9 @@ void EFX::moveString(const String string, PosX pos_x, PosY pos_y, byte padding, 
         ti.push_back(timer);
 
         id = strMov.size() - 1;
+
+        Serial.print("new string:");
+        Serial.println(id);
     }
 
     setPositionMoveStr(string, pos_x, pos_y);
@@ -468,17 +483,22 @@ void EFX::moveString(const String string, PosX pos_x, PosY pos_y, byte padding, 
         sp[id].move = true;
         sp[id].move_x = sp[id].start_x = x;
 
-        sp[id].padding = padding;
-        // sp[id].padding = sp[id].start_x;
+        // sp[id].padding = padding;
+        sp[id].padding = sp[id].start_x;
 
         sp[id].moveLeft = true;
         sp[id].moveRight = false;
 
-        if (sp[id].padding > sp[id].start_x)
-        {
-            // sp[id].move_x = sp[id].start_x = padding;
-            sp[id].padding = sp[id].start_x;
-        }
+        // if (deep_x == 0)
+        // {
+        sp[id].deep_x = sp[id].start_x;
+        // }
+
+        // if (sp[id].padding > sp[id].start_x)
+        // {
+        //     // sp[id].move_x = sp[id].start_x = padding;
+        //     sp[id].padding = sp[id].start_x;
+        // }
     }
 
     setCursor(sp[id].move_x, y);
@@ -486,24 +506,25 @@ void EFX::moveString(const String string, PosX pos_x, PosY pos_y, byte padding, 
 
     if (ti[id].wait(speed))
     {
-        mover(sp[id].start_x, sp[id].move_x, sp[id].padding, sp[id].moveLeft, sp[id].moveRight);
+        mover(sp[id]);
     }
 }
 
-void EFX::escapeBar(boolean reset, byte counter, int sec)
+void EFX::escapeBar(boolean reset, byte counter, boolean &escape, boolean increase, int sec)
 {
-    if (!escBar)
-    {
-        blockWidth = screenWidth / counter;
-
-        escBar = true;
-    }
-
     static Timer timer;
 
     static byte amount;
 
-    boolean increase = false;
+    if (!escBar)
+    {
+        // Serial.print("if (!escBar):  ");
+        // Serial.println(escape);
+
+        blockWidth = screenWidth / counter;
+
+        escBar = true;
+    }
 
     amount = timer.counter(counter, increase, reset, sec);
 
@@ -513,11 +534,16 @@ void EFX::escapeBar(boolean reset, byte counter, int sec)
 
     if (!increase && amount == 0)
     {
+        // escape = true;
         escBar = false;
     }
 
     if (increase && amount == counter)
     {
+        // escape = true;
         escBar = false;
     }
+
+    // Serial.print("escape: ");
+    // Serial.println(escape);
 }

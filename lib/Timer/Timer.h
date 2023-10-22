@@ -17,6 +17,7 @@ private:
     boolean first;
 
 public:
+
     Timer();
     ~Timer();
 
@@ -30,7 +31,7 @@ public:
 
     byte restoreCounter(byte counter, boolean reset = false, int sec = 1000);
 
-    byte counter(byte counter, boolean increase = false, boolean reset = false, int sec = 1000);
+    byte counter(byte counter, boolean increase, boolean reset = false, int sec = 1000);
 
     boolean blink(unsigned long set = 500);
 
