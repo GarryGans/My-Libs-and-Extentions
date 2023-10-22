@@ -194,10 +194,10 @@ void EFX::setHeight(const uint8_t *font)
     {
         height = 18;
     }
-    else
-    {
-        // Serial.println("un");
-    }
+    // else
+    // {
+    // Serial.println("un");
+    // }
 }
 
 void EFX::textAlign(const char *string, PosX pos_x, PosY pos_y)
@@ -484,15 +484,15 @@ void EFX::moveString(const String string, PosX pos_x, PosY pos_y, byte deep_x, b
         sp[id].move_x = sp[id].start_x = x;
 
         // sp[id].padding = padding;
-        sp[id].padding = sp[id].start_x;
+        // sp[id].padding = sp[id].start_x;
 
         sp[id].moveLeft = true;
         sp[id].moveRight = false;
 
-        // if (deep_x == 0)
-        // {
-        sp[id].deep_x = sp[id].start_x;
-        // }
+        if (deep_x == 0)
+        {
+            sp[id].deep_x = sp[id].start_x;
+        }
 
         // if (sp[id].padding > sp[id].start_x)
         // {
@@ -516,34 +516,48 @@ void EFX::escapeBar(boolean reset, byte counter, boolean &escape, boolean increa
 
     static byte amount;
 
+    static boolean first;
+
     if (!escBar)
     {
-        // Serial.print("if (!escBar):  ");
-        // Serial.println(escape);
+        Serial.print("if (!escBar):  ");
+        Serial.println(escape);
 
         blockWidth = screenWidth / counter;
 
+        // escape = false;
         escBar = true;
+        first = true;
     }
 
     amount = timer.counter(counter, increase, reset, sec);
+
+    if (amount > 0)
+    {
+        first = false;
+    }
 
     width = blockWidth * amount;
 
     drawBox(0, 58, width, 6);
 
-    if (!increase && amount == 0)
-    {
-        // escape = true;
-        escBar = false;
-    }
-
     if (increase && amount == counter)
     {
-        // escape = true;
+        escape = true;
         escBar = false;
+        first = false;
+
+        Serial.print("escape +: ");
+        Serial.println(escape);
     }
 
-    // Serial.print("escape: ");
-    // Serial.println(escape);
+    else if (amount == 0 && !first)
+    {
+        escape = true;
+        escBar = false;
+        first = false;
+
+        Serial.print("escape -: ");
+        Serial.println(escape);
+    }
 }
