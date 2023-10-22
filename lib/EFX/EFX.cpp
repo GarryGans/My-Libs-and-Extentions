@@ -453,9 +453,6 @@ void EFX::moveString(const String string, PosX pos_x, PosY pos_y, byte deep_x, b
         if (strMov[i] == strNow)
         {
             id = i;
-
-            // Serial.print("old string:");
-            // Serial.println(id);
         }
     }
 
@@ -471,9 +468,6 @@ void EFX::moveString(const String string, PosX pos_x, PosY pos_y, byte deep_x, b
         ti.push_back(timer);
 
         id = strMov.size() - 1;
-
-        Serial.print("new string:");
-        Serial.println(id);
     }
 
     setPositionMoveStr(string, pos_x, pos_y);
@@ -520,9 +514,6 @@ void EFX::escapeBar(boolean reset, byte counter, boolean &escape, boolean increa
 
     if (!escBar)
     {
-        Serial.print("if (!escBar):  ");
-        Serial.println(escape);
-
         blockWidth = screenWidth / counter;
 
         // escape = false;
@@ -532,7 +523,7 @@ void EFX::escapeBar(boolean reset, byte counter, boolean &escape, boolean increa
 
     amount = timer.counter(counter, increase, reset, sec);
 
-    if (amount > 0)
+    if (!increase && amount > 0)
     {
         first = false;
     }
@@ -546,18 +537,12 @@ void EFX::escapeBar(boolean reset, byte counter, boolean &escape, boolean increa
         escape = true;
         escBar = false;
         first = false;
-
-        Serial.print("escape +: ");
-        Serial.println(escape);
     }
 
-    else if (amount == 0 && !first)
+    else if (!increase && amount == 0 && !first)
     {
         escape = true;
         escBar = false;
         first = false;
-
-        Serial.print("escape -: ");
-        Serial.println(escape);
     }
 }

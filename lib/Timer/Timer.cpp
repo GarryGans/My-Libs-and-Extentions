@@ -54,14 +54,6 @@ byte Timer::reduceCounter(byte counter, boolean reset, int sec)
 {
     static byte tempCounter;
 
-    // static boolean first;
-
-    // if (!first || reset)
-    // {
-    //     first = true;
-    //     tempCounter = counter;
-    // }
-
     if ((tempCounter == 0 && wait(sec)) || reset)
     {
         tempCounter = counter;
@@ -71,12 +63,6 @@ byte Timer::reduceCounter(byte counter, boolean reset, int sec)
     {
         tempCounter--;
     }
-
-    // if (tempCounter == 0 )
-    // {
-    //     first = false;
-    //     tempCounter = counter;
-    // }
 
     return tempCounter;
 }
