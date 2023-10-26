@@ -342,9 +342,9 @@ void EFX::blinkFrame(int value, PosX pos_x, PosY pos_y, boolean tempBlock, boole
 {
     if (!tempBlock)
     {
-        static Timer timer;
+        // static Timer timer;
 
-        if (timer.blink(blinkMil))
+        if (timer[0].blink(blinkMil))
         {
             if (dig)
             {
@@ -371,9 +371,9 @@ void EFX::blinkFrame(const char *format, byte digAmount, PosX pos_x, PosY pos_y,
 {
     if (!tempBlock)
     {
-        static Timer timer;
+        // static Timer timer;
 
-        if (timer.blink())
+        if (timer[1].blink())
         {
             width = getMaxCharWidth() * digAmount;
 
@@ -394,11 +394,6 @@ void EFX::mover(stringPoint &sp)
 {
     if (sp.moveLeft)
     {
-        // if (sp.move_x > 0)
-        // {
-        //     sp.move_x--;
-        // }
-
         sp.move_x--;
 
         if (sp.move_x == sp.start_x - sp.deep_x)
@@ -410,10 +405,6 @@ void EFX::mover(stringPoint &sp)
 
     else if (sp.moveRight)
     {
-        // if (sp.move_x < sp.start_x + sp.deep_x)
-        // {
-        //     sp.move_x++;
-        // }
         sp.move_x++;
 
         if (sp.move_x == sp.start_x + sp.deep_x)
@@ -464,7 +455,7 @@ void EFX::moveString(const String string, PosX pos_x, PosY pos_y, byte deep_x, b
         strMov.push_back(strNow);
         sp.push_back(spNow);
 
-        static Timer timer;
+        Timer timer;
         ti.push_back(timer);
 
         id = strMov.size() - 1;
@@ -487,6 +478,10 @@ void EFX::moveString(const String string, PosX pos_x, PosY pos_y, byte deep_x, b
         {
             sp[id].deep_x = sp[id].start_x;
         }
+        else
+        {
+            sp[id].deep_x = deep_x;
+        }
 
         // if (sp[id].padding > sp[id].start_x)
         // {
@@ -506,11 +501,11 @@ void EFX::moveString(const String string, PosX pos_x, PosY pos_y, byte deep_x, b
 
 void EFX::escapeBar(boolean reset, byte counter, boolean &escape, boolean increase, int sec)
 {
-    static Timer timer;
+    // static Timer timer;
 
-    static byte amount;
+    // static byte amount;
 
-    static boolean first;
+    // static boolean first;
 
     if (!escBar)
     {
@@ -521,7 +516,7 @@ void EFX::escapeBar(boolean reset, byte counter, boolean &escape, boolean increa
         first = true;
     }
 
-    amount = timer.counter(counter, increase, reset, sec);
+    amount = timer[3].counter(counter, increase, reset, sec);
 
     if (!increase && amount > 0)
     {

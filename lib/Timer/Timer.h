@@ -11,13 +11,15 @@ class Timer
 {
 private:
     unsigned long second = 1000;
-
     unsigned long prew;
 
     boolean first;
+    boolean a;
+
+    byte tempCounter = 0;
+    byte tempCounter_2 = 0;
 
 public:
-
     Timer();
     ~Timer();
 
