@@ -342,8 +342,6 @@ void EFX::blinkFrame(int value, PosX pos_x, PosY pos_y, boolean tempBlock, boole
 {
     if (!tempBlock)
     {
-        // static Timer timer;
-
         if (timer[0].blink(blinkMil))
         {
             if (dig)
@@ -371,8 +369,6 @@ void EFX::blinkFrame(const char *format, byte digAmount, PosX pos_x, PosY pos_y,
 {
     if (!tempBlock)
     {
-        // static Timer timer;
-
         if (timer[1].blink())
         {
             width = getMaxCharWidth() * digAmount;
@@ -390,7 +386,7 @@ void EFX::blinkFrame(const char *format, byte digAmount, PosX pos_x, PosY pos_y,
     }
 }
 
-void EFX::mover(stringPoint &sp)
+void EFX::deepMover(stringPoint &sp)
 {
     if (sp.moveLeft)
     {
@@ -415,17 +411,27 @@ void EFX::mover(stringPoint &sp)
     }
 }
 
-void EFX::sameScreen()
+void EFX::padMover(stringPoint &sp)
 {
-    if (sp[id].start_x != x)
+    if (sp.moveLeft)
     {
-        sp[id].start_x = x;
+        sp.move_x--;
 
-        if (sp[id].move_x > 2 * sp[id].start_x)
+        if (sp.move_x == sp.padding)
         {
-            sp[id].move_x = 2 * sp[id].start_x;
-            sp[id].moveLeft = true;
-            sp[id].moveRight = false;
+            sp.moveLeft = false;
+            sp.moveRight = true;
+        }
+    }
+
+    else if (sp.moveRight)
+    {
+        sp.move_x++;
+
+        if (sp.move_x == sp.start_x + sp.start_x - sp.padding)
+        {
+            sp.moveRight = false;
+            sp.moveLeft = true;
         }
     }
 }
@@ -435,7 +441,7 @@ bool EFX::moveStr::operator==(const moveStr &s) const
     return (string == s.string && pos_x == s.pos_x && pos_y == s.pos_y && speed == s.speed);
 }
 
-void EFX::moveString(const String string, PosX pos_x, PosY pos_y, byte deep_x, byte padding, int speed)
+void EFX::moveStringDeep(const String string, PosX pos_x, PosY pos_y, byte deep_x, int speed)
 {
     moveStr strNow = {string, pos_x, pos_y, speed};
 
@@ -468,9 +474,6 @@ void EFX::moveString(const String string, PosX pos_x, PosY pos_y, byte deep_x, b
         sp[id].move = true;
         sp[id].move_x = sp[id].start_x = x;
 
-        // sp[id].padding = padding;
-        // sp[id].padding = sp[id].start_x;
-
         sp[id].moveLeft = true;
         sp[id].moveRight = false;
 
@@ -482,12 +485,6 @@ void EFX::moveString(const String string, PosX pos_x, PosY pos_y, byte deep_x, b
         {
             sp[id].deep_x = deep_x;
         }
-
-        // if (sp[id].padding > sp[id].start_x)
-        // {
-        //     // sp[id].move_x = sp[id].start_x = padding;
-        //     sp[id].padding = sp[id].start_x;
-        // }
     }
 
     setCursor(sp[id].move_x, y);
@@ -495,7 +492,55 @@ void EFX::moveString(const String string, PosX pos_x, PosY pos_y, byte deep_x, b
 
     if (ti[id].wait(speed))
     {
-        mover(sp[id]);
+        deepMover(sp[id]);
+    }
+}
+
+void EFX::moveStringPad(const String string, PosX pos_x, PosY pos_y, byte padding, int speed)
+{
+    moveStr strNow = {string, pos_x, pos_y, speed};
+
+    for (byte i = 0; i < strMov.size(); i++)
+    {
+        if (strMov[i] == strNow)
+        {
+            id = i;
+        }
+    }
+
+    if (strMov.empty() || !(strNow == strMov[id]))
+    {
+        stringPoint spNow;
+        spNow.move = false;
+
+        strMov.push_back(strNow);
+        sp.push_back(spNow);
+
+        Timer timer;
+        ti.push_back(timer);
+
+        id = strMov.size() - 1;
+    }
+
+    setPositionMoveStr(string, pos_x, pos_y);
+
+    if (!sp[id].move)
+    {
+        sp[id].move = true;
+        sp[id].move_x = sp[id].start_x = x;
+
+        sp[id].padding = padding;
+
+        sp[id].moveLeft = true;
+        sp[id].moveRight = false;
+    }
+
+    setCursor(sp[id].move_x, y);
+    print(string);
+
+    if (ti[id].wait(speed))
+    {
+        padMover(sp[id]);
     }
 }
 

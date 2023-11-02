@@ -133,8 +133,6 @@ public:
     void customX(byte x);
     void customY(byte y);
 
-    void sameScreen();
-
     byte nextY(byte num, byte id);
 
     template <typename type>
@@ -159,9 +157,12 @@ public:
 
     void setHeight(const uint8_t *font);
 
-    void mover(stringPoint &sp);
+    void deepMover(stringPoint &sp);
+    void padMover(stringPoint &sp);
 
-    void moveString(const String string, PosX pos_x, PosY pos_y, byte deep_x = 0, byte padding = 0, int speed = 10);
+    void moveStringDeep(const String string, PosX pos_x, PosY pos_y, byte deep_x = 0, int speed = 10);
+    void moveStringPad(const String string, PosX pos_x, PosY pos_y, byte padding = 0, int speed = 10);
+
     void escapeBar(boolean reset, byte counter, boolean &escape, boolean increase, int sec = 1000);
 
     void blinkFrame(int value, PosX pos_x, PosY pos_y, boolean tempBlock = 0, boolean dig = 0);
