@@ -501,12 +501,6 @@ void EFX::moveString(const String string, PosX pos_x, PosY pos_y, byte deep_x, b
 
 void EFX::escapeBar(boolean reset, byte counter, boolean &escape, boolean increase, int sec)
 {
-    // static Timer timer;
-
-    // static byte amount;
-
-    // static boolean first;
-
     if (!escBar)
     {
         blockWidth = screenWidth / counter;

@@ -25,7 +25,7 @@ boolean Timer::wait(unsigned long set, boolean reset)
     return false;
 }
 
-byte Timer::minusCounter(byte &counter)
+byte Timer::minusCounter(byte counter)
 {
     if (wait(second))
     {
@@ -38,7 +38,7 @@ byte Timer::minusCounter(byte &counter)
     return counter;
 }
 
-byte Timer::plusCounter(byte &counter)
+byte Timer::plusCounter(byte counter)
 {
     if (wait(second))
     {
@@ -50,16 +50,29 @@ byte Timer::plusCounter(byte &counter)
 
 byte Timer::reduceCounter(byte counter, boolean reset, int sec)
 {
-    // static byte tempCounter;
-
-    if ((tempCounter == 0 && wait(sec)) || reset)
+    if (!firstCount)
     {
+        firstCount = true;
         tempCounter = counter;
     }
 
-    if (wait(sec) && tempCounter > 0)
+    if (reset)
     {
-        tempCounter--;
+        firstCount = false;
+        tempCounter = counter;
+    }
+
+    if (firstCount)
+    {
+        if (wait(sec) && tempCounter > 0)
+        {
+            tempCounter--;
+        }
+    }
+
+    if (tempCounter == 0)
+    {
+        firstCount = false;
     }
 
     return tempCounter;
@@ -69,7 +82,7 @@ byte Timer::restoreCounter(byte counter, boolean reset, int sec)
 {
     // static byte tempCounter_2;
 
-    if ((tempCounter == counter && wait(sec)) || reset)
+    if (tempCounter == counter && wait(sec))
     {
         tempCounter_2 = 0;
     }

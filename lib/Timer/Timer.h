@@ -15,6 +15,7 @@ private:
 
     boolean first;
     boolean a;
+    boolean firstCount;
 
     byte tempCounter = 0;
     byte tempCounter_2 = 0;
@@ -25,15 +26,15 @@ public:
 
     boolean wait(unsigned long set = 500, boolean reset = false);
 
-    byte minusCounter(byte &counter);
+    byte minusCounter(byte counter);
 
-    byte plusCounter(byte &counter);
+    byte plusCounter(byte counter);
 
     byte reduceCounter(byte counter, boolean reset, int sec = 1000);
 
     byte restoreCounter(byte counter, boolean reset = false, int sec = 1000);
 
-    byte counter(byte counter, boolean increase, boolean reset = false, int sec = 1000);
+    byte counter(byte counter, boolean increase = false, boolean reset = false, int sec = 1000);
 
     boolean blink(unsigned long set = 500);
 
