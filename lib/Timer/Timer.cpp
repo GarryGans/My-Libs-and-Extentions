@@ -14,32 +14,11 @@ boolean Timer::wait(unsigned long set, boolean reset)
     {
         prew = millis();
         first = true;
-        // reset = false;
-
-        Serial.println("reset");
     }
 
     if (millis() - prew >= set)
     {
-        prew = millis();
-
-        return true;
-    }
-
-    return false;
-}
-
-boolean Timer::wait(unsigned long set)
-{
-    if (!first)
-    {
-        prew = millis();
-        first = true;
-    }
-
-    if (millis() - prew >= set)
-    {
-        prew = millis();
+        first = false;
 
         return true;
     }
@@ -76,9 +55,6 @@ byte Timer::reduceCounter(byte counter, boolean reset, int sec)
     {
         firstCount = true;
         tempCounter = counter;
-
-        Serial.println("first");
-        Serial.println(tempCounter);
     }
 
     if (wait(sec, reset) && tempCounter > 0)
@@ -89,8 +65,6 @@ byte Timer::reduceCounter(byte counter, boolean reset, int sec)
         {
             firstCount = false;
         }
-
-        Serial.println(tempCounter);
     }
 
     return tempCounter;

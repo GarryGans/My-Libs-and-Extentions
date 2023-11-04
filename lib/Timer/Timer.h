@@ -15,7 +15,7 @@ private:
 
     boolean first = false;
     boolean a = false;
-    
+
     boolean firstCount = false;
     boolean firstCount_2 = false;
 
@@ -26,8 +26,7 @@ public:
     Timer();
     ~Timer();
 
-    boolean wait(unsigned long set, boolean reset);
-    boolean wait(unsigned long set);
+    boolean wait(unsigned long set, boolean reset= false);
 
     byte minusCounter(byte counter);
 
