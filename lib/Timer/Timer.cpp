@@ -112,8 +112,6 @@ boolean Timer::blink(unsigned long set)
 {
     if (wait(set))
     {
-        !a ? a = true : a = false;
+        return !a ? a = true : a = false;
     }
-
-    return a;
 }
