@@ -16,6 +16,8 @@ class EFX : public U8G2_SH1106_128X64_NONAME_1_HW_I2C
 private:
     Timer timer[4];
     byte amount = 0;
+    byte tempAmount = 0;
+
     boolean first = false;
     boolean escBar = false;
 
@@ -149,6 +151,7 @@ public:
     void moveStringPad(const String string, PosX pos_x, PosY pos_y, byte padding = 0, int speed = 10);
 
     void escapeBar(boolean reset, byte counter, boolean &escape, boolean increase, int sec = 1000);
+    void escapeBar(byte amount, boolean progress = false);
 
     void blinkFrame(int value, PosX pos_x, PosY pos_y, boolean tempBlock = 0, boolean dig = 0);
 

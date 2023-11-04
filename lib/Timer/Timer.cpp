@@ -14,6 +14,9 @@ boolean Timer::wait(unsigned long set, boolean reset)
     {
         prew = millis();
         first = true;
+        // reset = false;
+
+        Serial.println("reset");
     }
 
     if (millis() - prew >= set)
@@ -32,18 +35,11 @@ boolean Timer::wait(unsigned long set)
     {
         prew = millis();
         first = true;
-
-        Serial.print("!first: ");
-        Serial.println(first);
     }
 
     if (millis() - prew >= set)
     {
-        // first = false;
         prew = millis();
-
-        Serial.print("millis() - prew: ");
-        Serial.println(first);
 
         return true;
     }
@@ -76,29 +72,25 @@ byte Timer::plusCounter(byte counter)
 
 byte Timer::reduceCounter(byte counter, boolean reset, int sec)
 {
-    if (!firstCount)
+    if (!firstCount || reset)
     {
         firstCount = true;
         tempCounter = counter;
+
+        Serial.println("first");
+        Serial.println(tempCounter);
     }
 
-    if (reset)
+    if (wait(sec, reset) && tempCounter > 0)
     {
-        firstCount = false;
-        tempCounter = counter;
-    }
+        tempCounter--;
 
-    if (firstCount)
-    {
-        if (wait(sec) && tempCounter > 0)
+        if (tempCounter == 0)
         {
-            tempCounter--;
+            firstCount = false;
         }
-    }
 
-    if (tempCounter == 0)
-    {
-        firstCount = false;
+        Serial.println(tempCounter);
     }
 
     return tempCounter;
@@ -106,14 +98,20 @@ byte Timer::reduceCounter(byte counter, boolean reset, int sec)
 
 byte Timer::restoreCounter(byte counter, boolean reset, int sec)
 {
-    if (tempCounter == counter && wait(sec))
+    if (!firstCount_2 || reset)
     {
+        firstCount_2 = true;
         tempCounter_2 = 0;
     }
 
-    if (wait(sec) && tempCounter_2 < counter)
+    if (wait(sec, reset) && tempCounter_2 < counter)
     {
         tempCounter_2++;
+
+        if (tempCounter_2 == counter)
+        {
+            firstCount_2 = false;
+        }
     }
 
     return tempCounter_2;
@@ -133,7 +131,7 @@ byte Timer::counter(byte counter, boolean increase, boolean reset, int sec)
 
 boolean Timer::ready(byte counter, boolean reset)
 {
-    return wait(counter * second, reset);
+    return reduceCounter(counter, reset) == 0;
 }
 
 boolean Timer::blink(unsigned long set)

@@ -577,6 +577,37 @@ void EFX::escapeBar(boolean reset, byte counter, boolean &escape, boolean increa
     {
         escape = true;
         escBar = false;
+    }
+}
+
+void EFX::escapeBar(byte amount, boolean progress)
+{
+    if (!escBar)
+    {
+        tempAmount = amount;
+
+        blockWidth = screenWidth / tempAmount;
+
+        escBar = true;
+
+        if (!progress && amount > 0)
+        {
+            first = true;
+        }
+    }
+
+    width = blockWidth * amount;
+
+    drawBox(0, 58, width, 6);
+
+    if (progress && amount == tempAmount)
+    {
+        escBar = false;
+    }
+
+    else if (!progress && amount == 0 && first)
+    {
+        escBar = false;
         first = false;
     }
 }

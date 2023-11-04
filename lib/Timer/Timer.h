@@ -15,7 +15,9 @@ private:
 
     boolean first = false;
     boolean a = false;
+    
     boolean firstCount = false;
+    boolean firstCount_2 = false;
 
     byte tempCounter = 0;
     byte tempCounter_2 = 0;
