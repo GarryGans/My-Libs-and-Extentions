@@ -15,8 +15,9 @@ class EFX : public U8G2_SH1106_128X64_NONAME_1_HW_I2C
 {
 private:
     Timer timer[4];
-    byte amount;
-    boolean first;
+    byte amount = 0;
+    boolean first = false;
+    boolean escBar = false;
 
     unsigned long blinkMil = 500;
 
@@ -43,27 +44,6 @@ private:
     int unlock = 68;
     byte WH = 48;
 
-    // struct stringPoint
-    // {
-    //     byte move_x;
-    //     boolean move;
-    //     boolean moveLeft;
-    //     boolean moveRight;
-    //     byte start_x;
-    //     byte padding;
-    //     byte deep_x;
-
-    //     //  byte start_y;
-    // };
-
-    // vector<stringPoint> sp;
-
-    vector<Timer> ti;
-
-    byte setX;
-    byte setY;
-
-public:
     struct stringPoint
     {
         byte move_x;
@@ -79,8 +59,12 @@ public:
 
     vector<stringPoint> sp;
 
-    boolean escBar;
+    vector<Timer> ti;
 
+    byte setX;
+    byte setY;
+
+protected:
     enum class PosX
     {
         center,
@@ -127,6 +111,7 @@ public:
 
     vector<moveStr> strMov;
 
+public:
     EFX();
     ~EFX();
 

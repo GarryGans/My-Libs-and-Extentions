@@ -17,6 +17,6 @@ void loop()
   efx.firstPage();
   do
   {
-    efx.digAlign<byte>(38, EFX::PosX::leftHalf, EFX::PosY::center);
+    // efx.digAlign<byte>(38, EFX::PosX::leftHalf, EFX::PosY::center);
   } while (efx.nextPage());
 }

@@ -11,11 +11,11 @@ class Timer
 {
 private:
     unsigned long second = 1000;
-    unsigned long prew;
+    unsigned long prew = 0;
 
-    boolean first;
-    boolean a;
-    boolean firstCount;
+    boolean first = false;
+    boolean a = false;
+    boolean firstCount = false;
 
     byte tempCounter = 0;
     byte tempCounter_2 = 0;
@@ -24,7 +24,8 @@ public:
     Timer();
     ~Timer();
 
-    boolean wait(unsigned long set = 500, boolean reset = false);
+    boolean wait(unsigned long set, boolean reset);
+    boolean wait(unsigned long set);
 
     byte minusCounter(byte counter);
 
