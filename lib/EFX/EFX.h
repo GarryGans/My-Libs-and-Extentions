@@ -18,9 +18,6 @@ private:
     byte amount = 0;
     byte tempAmount = 0;
 
-    boolean first = false;
-    boolean escBar = false;
-
     unsigned long blinkMil = 500;
 
     const byte escapeCounter = 8;
@@ -114,6 +111,9 @@ protected:
     vector<moveStr> strMov;
 
 public:
+    boolean escBar = false;
+    boolean sleep = false;
+
     EFX();
     ~EFX();
 
@@ -156,6 +156,8 @@ public:
     void blinkFrame(int value, PosX pos_x, PosY pos_y, boolean tempBlock = 0, boolean dig = 0);
 
     void blinkFrame(const char *format, byte digAmount, PosX pos_x, PosY pos_y, boolean tempBlock = false);
+
+    void sleepMode();
 };
 
 #endif

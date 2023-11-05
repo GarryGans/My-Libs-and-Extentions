@@ -344,7 +344,7 @@ void EFX::blinkFrame(int value, PosX pos_x, PosY pos_y, boolean tempBlock, boole
     {
         if (timer[0].blink(blinkMil))
         {
-            byte width;
+            // byte width;
 
             if (dig)
             {
@@ -373,8 +373,8 @@ void EFX::blinkFrame(const char *format, byte digAmount, PosX pos_x, PosY pos_y,
     {
         if (timer[1].blink())
         {
-            byte width;
-            
+            // byte width;
+
             width = getMaxCharWidth() * digAmount;
 
             setPosition(format, pos_x, pos_y);
@@ -567,18 +567,11 @@ void EFX::escapeBar(boolean reset, byte counter, boolean &escape, boolean increa
     {
         amount = timer[3].counter(counter, increase, reset, sec);
 
-        if (increase && amount == counter)
+        if ((increase && amount == counter) || (!increase && amount == 0))
         {
             escape = true;
             escBar = false;
             Serial.println("FULL");
-        }
-
-        if (!increase && amount == 0)
-        {
-            escape = true;
-            escBar = false;
-            Serial.println("ZERO");
         }
     }
 
@@ -595,25 +588,47 @@ void EFX::escapeBar(byte amount, boolean progress)
         blockWidth = screenWidth / tempAmount;
 
         escBar = true;
+    }
 
-        if (!progress && amount > 0)
+    // if (escape && timer[4].wait(sec))
+    // {
+    //     escape = false;
+    //     // Serial.println("escape");
+    // }
+
+    if (escBar)
+    {
+        if (amount == 0)
         {
-            first = true;
+            // escape = true;
+            escBar = false;
         }
     }
 
-    byte width = blockWidth * amount;
+    byte width;
 
-    drawBox(0, 58, width, 6);
-
-    if (progress && amount == tempAmount)
+    if (!progress)
     {
-        escBar = false;
+        width = blockWidth * amount;
     }
 
-    else if (!progress && amount == 0 && first)
+    else
     {
-        escBar = false;
-        first = false;
+        width = blockWidth * (tempAmount - amount + 1);
+    }
+
+    drawBox(0, 58, width, 6);
+}
+
+void EFX::sleepMode()
+{
+    if (sleep)
+    {
+        firstPage();
+        do
+        {
+            setHeight(u8g2_font_courB08_tf);
+            textAlign("SLEEP", PosX::center, PosY::center);
+        } while (nextPage());
     }
 }

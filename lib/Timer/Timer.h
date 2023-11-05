@@ -17,7 +17,7 @@ private:
     boolean first_1 = false;
     boolean first_2 = false;
 
-    boolean a = false;
+    boolean _blink = false;
 
     byte temp_0;
     byte temp_1;
