@@ -32,13 +32,13 @@ public:
 
     byte plusCounter(byte counter);
 
-    byte reduceCounter(byte counter, boolean reset, int sec = 1000);
+    byte reduceCounter(byte counter, boolean reset, int time = 1000);
 
-    byte restoreCounter(byte counter, boolean reset = false, int sec = 1000);
+    byte restoreCounter(byte counter, boolean reset = false, int time = 1000);
 
-    byte counter(byte counter, boolean increase = false, boolean reset = false, int sec = 1000);
+    byte counter(byte counter, boolean increase = false, boolean reset = false, int time = 1000);
 
-    boolean blink(unsigned long set = 500);
+    boolean blink(unsigned long time = 500);
 
     boolean ready(byte counter, boolean reset = false);
 };

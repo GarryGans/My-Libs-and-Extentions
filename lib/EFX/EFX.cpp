@@ -548,7 +548,7 @@ void EFX::moveStringPad(const String string, PosX pos_x, PosY pos_y, byte paddin
     }
 }
 
-void EFX::autoEscapeBar(boolean reset, byte counter, boolean &escape, boolean increase, int sec)
+void EFX::autoEscapeBar(boolean reset, byte counter, boolean &escape, boolean increase, int time)
 {
     if (!escBar && !escape)
     {
@@ -557,7 +557,7 @@ void EFX::autoEscapeBar(boolean reset, byte counter, boolean &escape, boolean in
         Serial.println("escBar");
     }
 
-    if (escape && timer[4].wait(sec))
+    if (escape && timer[4].wait(time))
     {
         escape = false;
         Serial.println("escape");
@@ -565,7 +565,7 @@ void EFX::autoEscapeBar(boolean reset, byte counter, boolean &escape, boolean in
 
     if (escBar)
     {
-        amount = timer[3].counter(counter, increase, reset, sec);
+        amount = timer[3].counter(counter, increase, reset, time);
 
         if ((increase && amount == counter) || (!increase && amount == 0))
         {

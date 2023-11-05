@@ -8,7 +8,7 @@ Timer::~Timer()
 {
 }
 
-boolean Timer::wait(unsigned long set, boolean reset)
+boolean Timer::wait(unsigned long time, boolean reset)
 {
     if (!first_2 || reset)
     {
@@ -16,7 +16,7 @@ boolean Timer::wait(unsigned long set, boolean reset)
         first_2 = true;
     }
 
-    if (millis() - prew >= set)
+    if (millis() - prew >= time)
     {
         first_2 = false;
 
@@ -49,7 +49,7 @@ byte Timer::plusCounter(byte counter)
     return counter;
 }
 
-byte Timer::reduceCounter(byte counter, boolean reset, int sec)
+byte Timer::reduceCounter(byte counter, boolean reset, int time)
 {
     if (!first_0 || reset)
     {
@@ -57,7 +57,7 @@ byte Timer::reduceCounter(byte counter, boolean reset, int sec)
         temp_0 = counter;
     }
 
-    if (wait(sec, reset) && temp_0 > 0)
+    if (wait(time, reset) && temp_0 > 0)
     {
         temp_0--;
 
@@ -70,7 +70,7 @@ byte Timer::reduceCounter(byte counter, boolean reset, int sec)
     return temp_0;
 }
 
-byte Timer::restoreCounter(byte counter, boolean reset, int sec)
+byte Timer::restoreCounter(byte counter, boolean reset, int time)
 {
     if (!first_1 || reset)
     {
@@ -78,7 +78,7 @@ byte Timer::restoreCounter(byte counter, boolean reset, int sec)
         temp_1 = 0;
     }
 
-    if (wait(sec, reset) && temp_1 < counter)
+    if (wait(time, reset) && temp_1 < counter)
     {
         temp_1++;
 
@@ -91,15 +91,15 @@ byte Timer::restoreCounter(byte counter, boolean reset, int sec)
     return temp_1;
 }
 
-byte Timer::counter(byte counter, boolean increase, boolean reset, int sec)
+byte Timer::counter(byte counter, boolean increase, boolean reset, int time)
 {
     if (increase)
     {
-        return restoreCounter(counter, reset, sec);
+        return restoreCounter(counter, reset, time);
     }
     else
     {
-        return reduceCounter(counter, reset, sec);
+        return reduceCounter(counter, reset, time);
     }
 }
 
@@ -108,9 +108,9 @@ boolean Timer::ready(byte counter, boolean reset)
     return reduceCounter(counter, reset) == 0;
 }
 
-boolean Timer::blink(unsigned long set)
+boolean Timer::blink(unsigned long time)
 {
-    if (wait(set))
+    if (wait(time))
     {
         !_blink ? _blink = true : _blink = false;
     }

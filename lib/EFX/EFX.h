@@ -152,7 +152,7 @@ public:
     void moveStringDeep(const String string, PosX pos_x, PosY pos_y, byte deep_x = 0, int speed = 10);
     void moveStringPad(const String string, PosX pos_x, PosY pos_y, byte padding = 0, int speed = 10);
 
-    void autoEscapeBar(boolean reset, byte counter, boolean &escape, boolean increase, int sec = 1000);
+    void autoEscapeBar(boolean reset, byte counter, boolean &escape, boolean increase, int time = 1000);
 
     void escapeBar(byte amount, boolean progress);
     void escapeBrickBar(byte amount, boolean progress);
