@@ -442,12 +442,12 @@ void EFX::padMover(stringPoint &sp)
 
 bool EFX::moveStr::operator==(const moveStr &s) const
 {
-    return (string == s.string && pos_x == s.pos_x && pos_y == s.pos_y && speed == s.speed);
+    return (string == s.string && pos_x == s.pos_x && pos_y == s.pos_y && time == s.time);
 }
 
-void EFX::moveStringDeep(const String string, PosX pos_x, PosY pos_y, byte deep_x, int speed)
+void EFX::moveStringDeep(const String string, PosX pos_x, PosY pos_y, byte deep_x, int time)
 {
-    moveStr strNow = {string, pos_x, pos_y, speed};
+    moveStr strNow = {string, pos_x, pos_y, time};
 
     for (byte i = 0; i < strMov.size(); i++)
     {
@@ -494,15 +494,15 @@ void EFX::moveStringDeep(const String string, PosX pos_x, PosY pos_y, byte deep_
     setCursor(sp[id].move_x, y);
     print(string);
 
-    if (ti[id].wait(speed))
+    if (ti[id].wait(time))
     {
         deepMover(sp[id]);
     }
 }
 
-void EFX::moveStringPad(const String string, PosX pos_x, PosY pos_y, byte padding, int speed)
+void EFX::moveStringPad(const String string, PosX pos_x, PosY pos_y, byte padding, int time)
 {
-    moveStr strNow = {string, pos_x, pos_y, speed};
+    moveStr strNow = {string, pos_x, pos_y, time};
 
     for (byte i = 0; i < strMov.size(); i++)
     {
@@ -542,7 +542,7 @@ void EFX::moveStringPad(const String string, PosX pos_x, PosY pos_y, byte paddin
     setCursor(sp[id].move_x, y);
     print(string);
 
-    if (ti[id].wait(speed))
+    if (ti[id].wait(time))
     {
         padMover(sp[id]);
     }

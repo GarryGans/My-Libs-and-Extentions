@@ -105,7 +105,7 @@ protected:
         String string;
         PosX pos_x;
         PosY pos_y;
-        int speed;
+        int time;
 
         bool operator==(const moveStr &) const;
     };
@@ -149,8 +149,8 @@ public:
     void deepMover(stringPoint &sp);
     void padMover(stringPoint &sp);
 
-    void moveStringDeep(const String string, PosX pos_x, PosY pos_y, byte deep_x = 0, int speed = 10);
-    void moveStringPad(const String string, PosX pos_x, PosY pos_y, byte padding = 0, int speed = 10);
+    void moveStringDeep(const String string, PosX pos_x, PosY pos_y, byte deep_x = 0, int time = 10);
+    void moveStringPad(const String string, PosX pos_x, PosY pos_y, byte padding = 0, int time = 10);
 
     void autoEscapeBar(boolean reset, byte counter, boolean &escape, boolean increase, int time = 1000);
 
