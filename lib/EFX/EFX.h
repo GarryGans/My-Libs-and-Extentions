@@ -14,9 +14,11 @@ using namespace std;
 class EFX : public U8G2_SH1106_128X64_NONAME_1_HW_I2C
 {
 private:
-    Timer timer[5];
+    Timer timer[6];
     byte amount = 0;
     byte tempAmount = 0;
+
+    byte barWidth = 0;
 
     unsigned long blinkMil = 500;
 
@@ -150,8 +152,13 @@ public:
     void moveStringDeep(const String string, PosX pos_x, PosY pos_y, byte deep_x = 0, int speed = 10);
     void moveStringPad(const String string, PosX pos_x, PosY pos_y, byte padding = 0, int speed = 10);
 
-    void escapeBar(boolean reset, byte counter, boolean &escape, boolean increase, int sec = 1000);
-    void escapeBar(byte amount, boolean progress = false);
+    void autoEscapeBar(boolean reset, byte counter, boolean &escape, boolean increase, int sec = 1000);
+
+    void escapeBar(byte amount, boolean progress);
+    void escapeBrickBar(byte amount, boolean progress);
+
+    void progressBar(byte amount, boolean reset);
+    void progressBrickBar(byte amount, boolean reset);
 
     void blinkFrame(int value, PosX pos_x, PosY pos_y, boolean tempBlock = 0, boolean dig = 0);
 

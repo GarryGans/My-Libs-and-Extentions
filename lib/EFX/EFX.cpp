@@ -548,7 +548,7 @@ void EFX::moveStringPad(const String string, PosX pos_x, PosY pos_y, byte paddin
     }
 }
 
-void EFX::escapeBar(boolean reset, byte counter, boolean &escape, boolean increase, int sec)
+void EFX::autoEscapeBar(boolean reset, byte counter, boolean &escape, boolean increase, int sec)
 {
     if (!escBar && !escape)
     {
@@ -579,44 +579,72 @@ void EFX::escapeBar(boolean reset, byte counter, boolean &escape, boolean increa
     drawBox(0, 58, width, 6);
 }
 
-void EFX::escapeBar(byte amount, boolean progress)
+void EFX::escapeBar(byte amount, boolean reset)
 {
-    if (!escBar)
+    if (reset)
     {
-        tempAmount = amount;
+        barWidth = screenWidth;
 
-        blockWidth = screenWidth / tempAmount;
-
-        escBar = true;
+        Serial.println("esc");
     }
 
-    // if (escape && timer[4].wait(sec))
-    // {
-    //     escape = false;
-    //     // Serial.println("escape");
-    // }
-
-    if (escBar)
+    if (timer[5].wait(amount * 1000 / screenWidth))
     {
-        if (amount == 0)
+        if (barWidth > 0)
         {
-            // escape = true;
-            escBar = false;
+            barWidth--;
         }
     }
 
-    byte width;
+    drawBox(0, 58, barWidth, 6);
 
-    if (!progress)
+    Serial.println(barWidth);
+}
+
+void EFX::escapeBrickBar(byte amount, boolean reset)
+{
+    if (reset)
     {
-        width = blockWidth * amount;
+        blockWidth = screenWidth / amount;
+        Serial.println("escBar");
     }
 
-    else
+    byte width = blockWidth * (amount);
+    drawBox(0, 58, width, 6);
+}
+
+void EFX::progressBar(byte amount, boolean reset)
+{
+    if (reset)
     {
-        width = blockWidth * (tempAmount - amount + 1);
+        barWidth = 0;
+
+        Serial.println("esc");
     }
 
+    if (timer[5].wait(amount * 1000 / screenWidth))
+    {
+        if (barWidth < screenWidth)
+        {
+            barWidth++;
+        }
+    }
+
+    drawBox(0, 58, barWidth, 6);
+
+    Serial.println(barWidth);
+}
+
+void EFX::progressBrickBar(byte amount, boolean reset)
+{
+    if (reset)
+    {
+        tempAmount = amount;
+        blockWidth = screenWidth / amount;
+        Serial.println("escBar");
+    }
+
+    byte width = blockWidth * (tempAmount - amount);
     drawBox(0, 58, width, 6);
 }
 
