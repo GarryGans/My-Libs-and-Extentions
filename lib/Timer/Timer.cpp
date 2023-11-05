@@ -10,15 +10,15 @@ Timer::~Timer()
 
 boolean Timer::wait(unsigned long set, boolean reset)
 {
-    if (!first || reset)
+    if (!first_2 || reset)
     {
         prew = millis();
-        first = true;
+        first_2 = true;
     }
 
     if (millis() - prew >= set)
     {
-        first = false;
+        first_2 = false;
 
         return true;
     }
@@ -51,44 +51,44 @@ byte Timer::plusCounter(byte counter)
 
 byte Timer::reduceCounter(byte counter, boolean reset, int sec)
 {
-    if (!firstCount || reset)
+    if (!first_0 || reset)
     {
-        firstCount = true;
-        tempCounter = counter;
+        first_0 = true;
+        temp_0 = counter;
     }
 
-    if (wait(sec, reset) && tempCounter > 0)
+    if (wait(sec, reset) && temp_0 > 0)
     {
-        tempCounter--;
+        temp_0--;
 
-        if (tempCounter == 0)
+        if (temp_0 == 0)
         {
-            firstCount = false;
+            first_0 = false;
         }
     }
 
-    return tempCounter;
+    return temp_0;
 }
 
 byte Timer::restoreCounter(byte counter, boolean reset, int sec)
 {
-    if (!firstCount_2 || reset)
+    if (!first_1 || reset)
     {
-        firstCount_2 = true;
-        tempCounter_2 = 0;
+        first_1 = true;
+        temp_1 = 0;
     }
 
-    if (wait(sec, reset) && tempCounter_2 < counter)
+    if (wait(sec, reset) && temp_1 < counter)
     {
-        tempCounter_2++;
+        temp_1++;
 
-        if (tempCounter_2 == counter)
+        if (temp_1 == counter)
         {
-            firstCount_2 = false;
+            first_1 = false;
         }
     }
 
-    return tempCounter_2;
+    return temp_1;
 }
 
 byte Timer::counter(byte counter, boolean increase, boolean reset, int sec)
@@ -112,6 +112,8 @@ boolean Timer::blink(unsigned long set)
 {
     if (wait(set))
     {
-        return !a ? a = true : a = false;
+        !a ? a = true : a = false;
     }
+
+    return a;
 }

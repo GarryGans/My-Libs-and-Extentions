@@ -14,7 +14,7 @@ using namespace std;
 class EFX : public U8G2_SH1106_128X64_NONAME_1_HW_I2C
 {
 private:
-    Timer timer[4];
+    Timer timer[5];
     byte amount = 0;
     byte tempAmount = 0;
 

@@ -13,20 +13,20 @@ private:
     unsigned long second = 1000;
     unsigned long prew = 0;
 
-    boolean first = false;
+    boolean first_0 = false;
+    boolean first_1 = false;
+    boolean first_2 = false;
+
     boolean a = false;
 
-    boolean firstCount = false;
-    boolean firstCount_2 = false;
-
-    byte tempCounter = 0;
-    byte tempCounter_2 = 0;
+    byte temp_0;
+    byte temp_1;
 
 public:
     Timer();
     ~Timer();
 
-    boolean wait(unsigned long set, boolean reset= false);
+    boolean wait(unsigned long set, boolean reset = false);
 
     byte minusCounter(byte counter);
 
