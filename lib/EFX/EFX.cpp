@@ -584,12 +584,12 @@ void EFX::escapeBar(byte amount, boolean reset)
     if (reset)
     {
         barWidth = screenWidth;
-        tempAmount = (double)amount;
+        tempAmount = (double)amount - (double)1;
 
-        // Serial.println("esc");
+        Serial.println("esc");
     }
 
-    if (timer[5].wait((double)tempAmount * (double)1000 / (double)screenWidth)) // constant
+        if (timer[5].wait((double)tempAmount * (double)1000 / (double)screenWidth)) // constant
 
     // if (timer[5].wait((double)amount * (double)1000 / (double)screenWidth)) // acceleration
     {
@@ -601,9 +601,14 @@ void EFX::escapeBar(byte amount, boolean reset)
 
     drawBox(0, 58, barWidth, 6);
 
-    // Serial.print(barWidth);
-    // Serial.print("-----");
-    // Serial.println(amount);
+    // if (amount == 1)
+    // {
+    //     tempAmount = 0;
+    // }
+
+    Serial.print(barWidth);
+    Serial.print("-----");
+    Serial.println(amount);
 }
 
 void EFX::escapeBrickBar(byte amount, boolean reset)
