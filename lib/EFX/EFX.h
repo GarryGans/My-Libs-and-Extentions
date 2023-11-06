@@ -16,9 +16,8 @@ class EFX : public U8G2_SH1106_128X64_NONAME_1_HW_I2C
 private:
     Timer timer[6];
     byte amount = 0;
-    byte tempAmount = 0;
+    // byte tempAmount = 0;
 
-    byte barWidth = 0;
 
     unsigned long blinkMil = 500;
 
@@ -36,7 +35,11 @@ private:
     byte x;
     byte y;
 
-    byte blockWidth;
+    double blockWidth;
+    double brick = 0;
+
+    byte barWidth = 0;
+    double tempAmount = 0;
 
     byte id = 0;
 
@@ -154,8 +157,8 @@ public:
 
     void autoEscapeBar(boolean reset, byte counter, boolean &escape, boolean increase, int time = 1000);
 
-    void escapeBar(byte amount, boolean progress);
-    void escapeBrickBar(byte amount, boolean progress);
+    void escapeBar(byte amount, boolean reset);
+    void escapeBrickBar(byte amount, boolean reset);
 
     void progressBar(byte amount, boolean reset);
     void progressBrickBar(byte amount, boolean reset);

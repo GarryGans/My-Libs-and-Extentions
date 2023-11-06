@@ -554,13 +554,13 @@ void EFX::autoEscapeBar(boolean reset, byte counter, boolean &escape, boolean in
     {
         blockWidth = screenWidth / counter;
         escBar = true;
-        Serial.println("escBar");
+        // Serial.println("escBar");
     }
 
     if (escape && timer[4].wait(time))
     {
         escape = false;
-        Serial.println("escape");
+        // Serial.println("escape");
     }
 
     if (escBar)
@@ -571,7 +571,7 @@ void EFX::autoEscapeBar(boolean reset, byte counter, boolean &escape, boolean in
         {
             escape = true;
             escBar = false;
-            Serial.println("FULL");
+            // Serial.println("FULL");
         }
     }
 
@@ -584,11 +584,14 @@ void EFX::escapeBar(byte amount, boolean reset)
     if (reset)
     {
         barWidth = screenWidth;
+        tempAmount = (double)amount;
 
-        Serial.println("esc");
+        // Serial.println("esc");
     }
 
-    if (timer[5].wait(amount * 1000 / screenWidth))
+    if (timer[5].wait((double)tempAmount * (double)1000 / (double)screenWidth)) // constant
+
+    // if (timer[5].wait((double)amount * (double)1000 / (double)screenWidth)) // acceleration
     {
         if (barWidth > 0)
         {
@@ -598,18 +601,20 @@ void EFX::escapeBar(byte amount, boolean reset)
 
     drawBox(0, 58, barWidth, 6);
 
-    Serial.println(barWidth);
+    // Serial.print(barWidth);
+    // Serial.print("-----");
+    // Serial.println(amount);
 }
 
 void EFX::escapeBrickBar(byte amount, boolean reset)
 {
     if (reset)
     {
-        blockWidth = screenWidth / amount;
-        Serial.println("escBar");
+        brick = (double)screenWidth / (double)amount;
+        // Serial.println("escBar");
     }
 
-    byte width = blockWidth * (amount);
+    double width = brick * (double)amount;
     drawBox(0, 58, width, 6);
 }
 
@@ -619,7 +624,7 @@ void EFX::progressBar(byte amount, boolean reset)
     {
         barWidth = 0;
 
-        Serial.println("esc");
+        // Serial.println("esc");
     }
 
     if (timer[5].wait(amount * 1000 / screenWidth))
@@ -632,7 +637,7 @@ void EFX::progressBar(byte amount, boolean reset)
 
     drawBox(0, 58, barWidth, 6);
 
-    Serial.println(barWidth);
+    // Serial.println(barWidth);
 }
 
 void EFX::progressBrickBar(byte amount, boolean reset)
@@ -641,7 +646,7 @@ void EFX::progressBrickBar(byte amount, boolean reset)
     {
         tempAmount = amount;
         blockWidth = screenWidth / amount;
-        Serial.println("escBar");
+        // Serial.println("escBar");
     }
 
     byte width = blockWidth * (tempAmount - amount);
