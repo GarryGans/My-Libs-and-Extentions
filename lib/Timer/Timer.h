@@ -13,9 +13,11 @@ private:
     unsigned long second = 1000;
     unsigned long prew = 0;
 
-    boolean first_0 = false;
-    boolean first_1 = false;
-    boolean first_2 = false;
+    boolean first= false;
+
+    // boolean first_0 = false;
+    // boolean first_1 = false;
+    // boolean first_2 = false;
     // boolean first_3 = false;
     // boolean first_4 = false;
 

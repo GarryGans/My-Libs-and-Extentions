@@ -12,7 +12,6 @@ boolean Timer::wait(unsigned long time, boolean reset)
 {
     if (reset)
     {
-        // reset = false;
         prew = millis();
     }
 
@@ -28,16 +27,16 @@ boolean Timer::wait(unsigned long time, boolean reset)
 
 boolean Timer::wait(unsigned long time)
 {
-    if (!first_2)
+    if (!first)
     {
-        first_2 = true;
+        first = true;
         prew = millis();
     }
 
     if (millis() - prew >= time)
     {
         // prew = millis();
-        first_2 = false;
+        first = false;
 
         return true;
     }
@@ -82,9 +81,6 @@ byte Timer::reduceByCounter(byte time, byte barWidth, double prewBarWidth, doubl
             {
                 factor = prewBarWidth;
             }
-
-            // Serial.print("time: ");
-            // Serial.println(time);
         }
     }
 
@@ -95,76 +91,30 @@ byte Timer::reduceCounter(byte counter, boolean reset, int time)
 {
     if (reset)
     {
-        // reset = false;
         temp_0 = counter;
-
-        
     }
 
     if (wait(time, reset) && temp_0 > 0)
     {
         temp_0--;
-
-        // Serial.print("time: ");
-        // Serial.println(temp_0);
     }
 
-    // reset = false;
-
     return temp_0;
-
-    // if (!first_0 || reset)
-    // {
-    //     first_0 = true;
-    //     temp_0 = counter;
-    // }
-
-    // if (wait(time, reset) && temp_0 > 0)
-    // {
-    //     temp_0--;
-
-    //     if (temp_0 == 0)
-    //     {
-    //         first_0 = false;
-    //     }
-    // }
-
-    // return temp_0;
 }
 
 byte Timer::restoreCounter(byte counter, boolean reset, int time)
 {
     if (reset)
     {
-        // reset = false;
         temp_1 = 0;
     }
 
     if (wait(time, reset) && temp_1 < counter)
     {
         temp_1++;
-        reset = false;
     }
 
     return temp_1;
-
-    // if (!first_1 || reset)
-    // {
-    //     first_1 = true;
-    //     temp_1 = 0;
-    // }
-
-    // if (wait(time, reset) && temp_1 < counter)
-    // {
-    //     temp_1++;
-
-    //     if (temp_1 == counter)
-    //     {
-    //         first_1 = false;
-    //     }
-    // }
-
-    // return temp_1;
 }
 
 byte Timer::counter(byte counter, boolean increase, boolean reset, int time)
