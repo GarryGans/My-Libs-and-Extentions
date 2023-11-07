@@ -10,14 +10,33 @@ Timer::~Timer()
 
 boolean Timer::wait(unsigned long time, boolean reset)
 {
-    if (!first_2 || reset)
+    if (reset)
     {
+        // reset = false;
         prew = millis();
-        first_2 = true;
     }
 
     if (millis() - prew >= time)
     {
+        prew = millis();
+
+        return true;
+    }
+
+    return false;
+}
+
+boolean Timer::wait(unsigned long time)
+{
+    if (!first_2)
+    {
+        first_2 = true;
+        prew = millis();
+    }
+
+    if (millis() - prew >= time)
+    {
+        // prew = millis();
         first_2 = false;
 
         return true;
@@ -49,46 +68,75 @@ byte Timer::plusCounter(byte counter)
     return counter;
 }
 
-byte Timer::reduceCounter(byte counter, boolean reset, int time)
+byte Timer::reduceCounter(byte counter, boolean &reset, int time)
 {
-    if (!first_0 || reset)
+    if (reset)
     {
-        first_0 = true;
+        // reset = false;
         temp_0 = counter;
     }
 
     if (wait(time, reset) && temp_0 > 0)
     {
         temp_0--;
-
-        if (temp_0 == 0)
-        {
-            first_0 = false;
-        }
     }
 
+    reset = false;
+
     return temp_0;
+
+    // if (!first_0 || reset)
+    // {
+    //     first_0 = true;
+    //     temp_0 = counter;
+    // }
+
+    // if (wait(time, reset) && temp_0 > 0)
+    // {
+    //     temp_0--;
+
+    //     if (temp_0 == 0)
+    //     {
+    //         first_0 = false;
+    //     }
+    // }
+
+    // return temp_0;
 }
 
 byte Timer::restoreCounter(byte counter, boolean reset, int time)
 {
-    if (!first_1 || reset)
+    if (reset)
     {
-        first_1 = true;
+        // reset = false;
         temp_1 = 0;
     }
 
     if (wait(time, reset) && temp_1 < counter)
     {
         temp_1++;
-
-        if (temp_1 == counter)
-        {
-            first_1 = false;
-        }
+        reset = false;
     }
 
     return temp_1;
+
+    // if (!first_1 || reset)
+    // {
+    //     first_1 = true;
+    //     temp_1 = 0;
+    // }
+
+    // if (wait(time, reset) && temp_1 < counter)
+    // {
+    //     temp_1++;
+
+    //     if (temp_1 == counter)
+    //     {
+    //         first_1 = false;
+    //     }
+    // }
+
+    // return temp_1;
 }
 
 byte Timer::counter(byte counter, boolean increase, boolean reset, int time)

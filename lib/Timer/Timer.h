@@ -16,7 +16,8 @@ private:
     boolean first_0 = false;
     boolean first_1 = false;
     boolean first_2 = false;
-    boolean first_3 = false;
+    // boolean first_3 = false;
+    // boolean first_4 = false;
 
     boolean _blink = false;
 
@@ -27,15 +28,17 @@ public:
     Timer();
     ~Timer();
 
-    boolean wait(unsigned long time, boolean reset = false);
+    boolean wait(unsigned long time, boolean reset);
+
+    boolean wait(unsigned long time = 1000);
 
     byte minusCounter(byte counter);
 
     byte plusCounter(byte counter);
 
-    byte reduceCounter(byte counter, boolean reset, int time = 1000);
+    byte reduceCounter(byte counter, boolean &reset, int time = 1000);
 
-    byte restoreCounter(byte counter, boolean reset = false, int time = 1000);
+    byte restoreCounter(byte counter, boolean reset, int time = 1000);
 
     byte counter(byte counter, boolean increase = false, boolean reset = false, int time = 1000);
 

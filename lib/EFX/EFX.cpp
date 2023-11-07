@@ -550,15 +550,10 @@ void EFX::moveStringPad(const String string, PosX pos_x, PosY pos_y, byte paddin
 
 void EFX::autoBar(byte &time, boolean &escape, boolean increase, boolean reset)
 {
-    if (reset)
-    {
-        escBar = false;
-    }
-
-    if (!escBar && !escape)
+    if (!escBar || reset)
     {
         prewBarWidth = barWidth = screenWidth;
-        // tempAmount = time;
+        // tempAmount = time ;
 
         temp = time * (double)sec / (double)screenWidth;
         factor = (double)screenWidth / (double)time;
@@ -566,20 +561,31 @@ void EFX::autoBar(byte &time, boolean &escape, boolean increase, boolean reset)
         escBar = true;
 
         Serial.println("escBar");
+
+        // Serial.print("tempAmount: ");
+        // Serial.println(tempAmount);
+
+        Serial.print("barWidth: ");
+        Serial.println(barWidth);
+
+        // Serial.print("time: ");
+        // Serial.println(time);
     }
 
     if (escBar)
     {
-        if (timer[3].wait(temp, reset))
-        {
-            if (barWidth > 0)
-            {
-                barWidth--;
+        // if (timer[3].wait(temp, reset))
+        // {
+        //     if (barWidth > 0)
+        //     {
+        //         barWidth--;
 
-                Serial.print("barWidth: ");
-                Serial.println(barWidth);
-            }
-        }
+        //         // Serial.print("barWidth: ");
+        //         // Serial.println(barWidth);
+        //     }
+        // }
+
+        barWidth = timer[3].reduceCounter(barWidth, reset, temp);
 
         if (barWidth == byte(prewBarWidth - factor))
         {
@@ -594,8 +600,8 @@ void EFX::autoBar(byte &time, boolean &escape, boolean increase, boolean reset)
                     factor = prewBarWidth;
                 }
 
-                Serial.print("time: ");
-                Serial.println(time);
+                // Serial.print("time: ");
+                // Serial.println(time);
             }
         }
 
@@ -604,7 +610,7 @@ void EFX::autoBar(byte &time, boolean &escape, boolean increase, boolean reset)
             escape = true;
             escBar = false;
 
-            Serial.println("FULL");
+            // Serial.println("FULL");
         }
 
         drawBox(x_bar, y_bar, barWidth, h_bar);

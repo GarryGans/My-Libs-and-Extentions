@@ -42,7 +42,7 @@ private:
 
     double blockWidth;
     double brick = 0;
-
+    
     double temp;
     double factor;
     byte barWidth = 0;
