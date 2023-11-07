@@ -10,11 +10,13 @@
 
 using namespace std;
 
+#define sec 1000
+
 // class EFX : public U8G2_SSD1306_128X64_NONAME_1_HW_I2C
 class EFX : public U8G2_SH1106_128X64_NONAME_1_HW_I2C
 {
 private:
-    Timer timer[8];
+    Timer timer[7];
     byte amount = 0;
     // byte tempAmount = 0;
 
@@ -37,7 +39,10 @@ private:
     double blockWidth;
     double brick = 0;
 
+    double temp;
+    double factor;
     byte barWidth = 0;
+    double prewBarWidth = 0;
     double tempAmount = 0;
 
     byte id = 0;
@@ -67,7 +72,7 @@ private:
     byte setX;
     byte setY;
 
-protected:
+public:
     enum class PosX
     {
         center,
@@ -114,9 +119,14 @@ protected:
 
     vector<moveStr> strMov;
 
-public:
     boolean escBar = false;
     boolean sleep = false;
+
+    //
+    //
+    //
+    //
+    //
 
     EFX();
     ~EFX();
@@ -154,7 +164,7 @@ public:
     void moveStringDeep(const String string, PosX pos_x, PosY pos_y, byte deep_x = 0, int time = 10);
     void moveStringPad(const String string, PosX pos_x, PosY pos_y, byte padding = 0, int time = 10);
 
-    void autoBar(byte time, boolean &escape, boolean increase = false, boolean reset = false);
+    void autoBar(byte &time, boolean &escape, boolean increase = false, boolean reset = false);
     void autoBrickBar(byte time, boolean &escape, boolean increase = false, boolean reset = false);
 
     void escapeBar(byte amount, boolean reset);

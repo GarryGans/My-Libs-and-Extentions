@@ -548,43 +548,71 @@ void EFX::moveStringPad(const String string, PosX pos_x, PosY pos_y, byte paddin
     }
 }
 
-void EFX::autoBar(byte time, boolean &escape, boolean increase, boolean reset)
+void EFX::autoBar(byte &time, boolean &escape, boolean increase, boolean reset)
 {
-    if ((!escBar && !escape) || reset)
+    if (reset)
     {
-        barWidth = screenWidth;
-        tempAmount = time;
+        escBar = false;
+    }
+
+    if (!escBar && !escape)
+    {
+        prewBarWidth = barWidth = screenWidth;
+        // tempAmount = time;
+
+        temp = time * (double)sec / (double)screenWidth;
+        factor = (double)screenWidth / (double)time;
+
         escBar = true;
-        escape = false;
-        // Serial.println("escBar");
+
+        Serial.println("escBar");
     }
 
     if (escBar)
     {
-        tempAmount = timer[3].counter(time, increase, reset, time);
-
-        double temp = ((double)tempAmount * (double)1000 / (double)screenWidth); // constant
-
-        // double temp = (double)tempAmount * (double)1000 / (double)barWidth; // acceleration
-
-        if (timer[5].wait(temp, reset))
+        if (timer[3].wait(temp, reset))
         {
             if (barWidth > 0)
             {
                 barWidth--;
+
+                Serial.print("barWidth: ");
+                Serial.println(barWidth);
             }
         }
 
-        if (barWidth == 0)
+        if (barWidth == byte(prewBarWidth - factor))
+        {
+            if (time > 0)
+            {
+                time--;
+
+                prewBarWidth = (prewBarWidth - factor);
+
+                if (prewBarWidth < factor)
+                {
+                    factor = prewBarWidth;
+                }
+
+                Serial.print("time: ");
+                Serial.println(time);
+            }
+        }
+
+        if (barWidth == 0 && time == 0)
         {
             escape = true;
             escBar = false;
-            // Serial.println("FULL");
-        }
-    }
 
-    byte width = blockWidth * amount;
-    drawBox(0, 58, width, 6);
+            Serial.println("FULL");
+        }
+
+        drawBox(0, 58, barWidth, 6);
+
+        // Serial.print(prewBarWidth);
+        // Serial.print("-----");
+        // Serial.println(factor);
+    }
 }
 
 void EFX::autoBrickBar(byte time, boolean &escape, boolean increase, boolean reset)
@@ -598,7 +626,7 @@ void EFX::autoBrickBar(byte time, boolean &escape, boolean increase, boolean res
 
     if (escBar)
     {
-        amount = timer[3].counter(time, increase, reset, time);
+        amount = timer[4].counter(time, increase, reset, time);
 
         if ((increase && amount == time) || (!increase && amount == 0))
         {
@@ -658,11 +686,9 @@ void EFX::progressBar(byte amount, boolean reset)
     if (reset)
     {
         barWidth = 0;
-
-        // Serial.println("esc");
     }
 
-    if (timer[5].wait(amount * 1000 / screenWidth))
+    if (timer[6].wait(amount * 1000 / screenWidth))
     {
         if (barWidth < screenWidth)
         {
@@ -671,8 +697,6 @@ void EFX::progressBar(byte amount, boolean reset)
     }
 
     drawBox(0, 58, barWidth, 6);
-
-    // Serial.println(barWidth);
 }
 
 void EFX::progressBrickBar(byte amount, boolean reset)

@@ -16,6 +16,7 @@ private:
     boolean first_0 = false;
     boolean first_1 = false;
     boolean first_2 = false;
+    boolean first_3 = false;
 
     boolean _blink = false;
 
@@ -26,7 +27,7 @@ public:
     Timer();
     ~Timer();
 
-    boolean wait(unsigned long set, boolean reset = false);
+    boolean wait(unsigned long time, boolean reset = false);
 
     byte minusCounter(byte counter);
 
