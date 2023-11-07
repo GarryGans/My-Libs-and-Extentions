@@ -548,26 +548,59 @@ void EFX::moveStringPad(const String string, PosX pos_x, PosY pos_y, byte paddin
     }
 }
 
-void EFX::autoEscapeBar(boolean reset, byte counter, boolean &escape, boolean increase, int time)
+void EFX::autoBar(byte time, boolean &escape, boolean increase, boolean reset)
 {
-    if (!escBar && !escape)
+    if ((!escBar && !escape) || reset)
     {
-        blockWidth = screenWidth / counter;
+        barWidth = screenWidth;
+        tempAmount = time;
         escBar = true;
-        // Serial.println("escBar");
-    }
-
-    if (escape && timer[4].wait(time))
-    {
         escape = false;
-        // Serial.println("escape");
+        // Serial.println("escBar");
     }
 
     if (escBar)
     {
-        amount = timer[3].counter(counter, increase, reset, time);
+        tempAmount = timer[3].counter(time, increase, reset, time);
 
-        if ((increase && amount == counter) || (!increase && amount == 0))
+        double temp = ((double)tempAmount * (double)1000 / (double)screenWidth); // constant
+
+        // double temp = (double)tempAmount * (double)1000 / (double)barWidth; // acceleration
+
+        if (timer[5].wait(temp, reset))
+        {
+            if (barWidth > 0)
+            {
+                barWidth--;
+            }
+        }
+
+        if (barWidth == 0)
+        {
+            escape = true;
+            escBar = false;
+            // Serial.println("FULL");
+        }
+    }
+
+    byte width = blockWidth * amount;
+    drawBox(0, 58, width, 6);
+}
+
+void EFX::autoBrickBar(byte time, boolean &escape, boolean increase, boolean reset)
+{
+    if (!escBar && !escape)
+    {
+        blockWidth = screenWidth / time;
+        escBar = true;
+        // Serial.println("escBar");
+    }
+
+    if (escBar)
+    {
+        amount = timer[3].counter(time, increase, reset, time);
+
+        if ((increase && amount == time) || (!increase && amount == 0))
         {
             escape = true;
             escBar = false;
@@ -589,9 +622,11 @@ void EFX::escapeBar(byte amount, boolean reset)
         Serial.println("esc");
     }
 
-        if (timer[5].wait((double)tempAmount * (double)1000 / (double)screenWidth)) // constant
+    double temp = ((double)tempAmount * (double)1000 / (double)screenWidth); // constant
 
-    // if (timer[5].wait((double)amount * (double)1000 / (double)screenWidth)) // acceleration
+    // double temp = ((double)amount - (double)1) * (double)1000 / (double)barWidth; // acceleration
+
+    if (timer[5].wait(temp, reset))
     {
         if (barWidth > 0)
         {
@@ -600,11 +635,6 @@ void EFX::escapeBar(byte amount, boolean reset)
     }
 
     drawBox(0, 58, barWidth, 6);
-
-    // if (amount == 1)
-    // {
-    //     tempAmount = 0;
-    // }
 
     Serial.print(barWidth);
     Serial.print("-----");
@@ -615,11 +645,11 @@ void EFX::escapeBrickBar(byte amount, boolean reset)
 {
     if (reset)
     {
-        brick = (double)screenWidth / (double)amount;
+        brick = (double)screenWidth / ((double)amount - (double)1);
         // Serial.println("escBar");
     }
 
-    double width = brick * (double)amount;
+    double width = brick * ((double)amount - (double)1);
     drawBox(0, 58, width, 6);
 }
 
