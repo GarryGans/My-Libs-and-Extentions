@@ -550,75 +550,113 @@ void EFX::moveStringPad(const String string, PosX pos_x, PosY pos_y, byte paddin
 
 void EFX::autoBar(byte &time, boolean &escape, boolean increase, boolean reset)
 {
-    if (!escBar || reset)
+    if (reset)
     {
-        prewBarWidth = barWidth = screenWidth;
-        // tempAmount = time ;
+        barWidth = screenWidth;
 
-        temp = time * (double)sec / (double)screenWidth;
-        factor = (double)screenWidth / (double)time;
+        temp = (double)time * (double)sec / (double)screenWidth;
+        temp_2 = ((double)screenWidth / (double)time) * temp;
 
         escBar = true;
-
-        Serial.println("escBar");
-
-        // Serial.print("tempAmount: ");
-        // Serial.println(tempAmount);
-
-        Serial.print("barWidth: ");
-        Serial.println(barWidth);
-
-        // Serial.print("time: ");
-        // Serial.println(time);
     }
 
     if (escBar)
     {
-        // if (timer[3].wait(temp, reset))
-        // {
-        //     if (barWidth > 0)
-        //     {
-        //         barWidth--;
+        barWidth = timer[2].reduceCounter(barWidth, reset, temp);
 
-        //         // Serial.print("barWidth: ");
-        //         // Serial.println(barWidth);
-        //     }
-        // }
-
-        barWidth = timer[3].reduceCounter(barWidth, reset, temp);
-
-        if (barWidth == byte(prewBarWidth - factor))
-        {
-            if (time > 0)
-            {
-                time--;
-
-                prewBarWidth = (prewBarWidth - factor);
-
-                if (prewBarWidth < factor)
-                {
-                    factor = prewBarWidth;
-                }
-
-                // Serial.print("time: ");
-                // Serial.println(time);
-            }
-        }
+        time = timer[3].reduceCounter(time, reset, temp_2);
 
         if (barWidth == 0 && time == 0)
         {
             escape = true;
             escBar = false;
-
-            // Serial.println("FULL");
         }
 
         drawBox(x_bar, y_bar, barWidth, h_bar);
-
-        // Serial.print(prewBarWidth);
-        // Serial.print("-----");
-        // Serial.println(factor);
     }
+
+    // if (reset)
+    // {
+    //     prewBarWidth = barWidth = screenWidth;
+    //     // tempAmount = time ;
+
+    //     // temp = time * (double)sec / (double)screenWidth;
+    //     // factor = (double)screenWidth / (double)time;
+
+    //     temp = (double)time * (double)sec / (double)screenWidth;
+    //     temp_2 = ((double)screenWidth  / (double)time) * temp;
+
+    //     Serial.print("temp: ");
+    //     Serial.println(temp);
+
+    //     Serial.print("temp_2: ");
+    //     Serial.println(temp_2);
+
+    //     escBar = true;
+
+    //     // Serial.println("escBar");
+
+    //     // Serial.print("tempAmount: ");
+    //     // Serial.println(tempAmount);
+
+    //     // Serial.print("barWidth: ");
+    //     // Serial.println(barWidth);
+
+    //     // Serial.print("time: ");
+    //     // Serial.println(time);
+    // }
+
+    // if (escBar)
+    // {
+    //     // if (timer[2].wait(temp, reset))
+    //     // {
+    //     //     if (barWidth > 0)
+    //     //     {
+    //     //         barWidth--;
+
+    //     //         // Serial.print("barWidth: ");
+    //     //         // Serial.println(barWidth);
+    //     //     }
+    //     // }
+
+    //     barWidth = timer[2].reduceCounter(barWidth, reset, temp);
+
+    //     time = timer[3].reduceCounter(time, reset, temp_2);
+
+    //     // time = timer[3].reduceByCounter(time, barWidth, prewBarWidth, factor);
+
+    //     // if (barWidth == byte(prewBarWidth - factor))
+    //     // {
+    //     //     if (time > 0)
+    //     //     {
+    //     //         time--;
+
+    //     //         prewBarWidth = (prewBarWidth - factor);
+
+    //     //         if (prewBarWidth < factor)
+    //     //         {
+    //     //             factor = prewBarWidth;
+    //     //         }
+
+    //     //         // Serial.print("time: ");
+    //     //         // Serial.println(time);
+    //     //     }
+    //     // }
+
+    //     if (barWidth == 0 && time == 0)
+    //     {
+    //         escape = true;
+    //         escBar = false;
+
+    //         // Serial.println("FULL");
+    //     }
+
+    //     drawBox(x_bar, y_bar, barWidth, h_bar);
+
+    //     // Serial.print(prewBarWidth);
+    //     // Serial.print("-----");
+    //     // Serial.println(factor);
+    // }
 }
 
 void EFX::autoBrickBar(byte time, boolean &escape, boolean increase, boolean reset)

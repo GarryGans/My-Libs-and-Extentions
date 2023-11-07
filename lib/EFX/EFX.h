@@ -44,6 +44,7 @@ private:
     double brick = 0;
     
     double temp;
+    double temp_2;
     double factor;
     byte barWidth = 0;
     double prewBarWidth = 0;

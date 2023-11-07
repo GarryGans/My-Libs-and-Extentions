@@ -36,7 +36,9 @@ public:
 
     byte plusCounter(byte counter);
 
-    byte reduceCounter(byte counter, boolean &reset, int time = 1000);
+    byte reduceByCounter(byte time, byte barWidth, double prewBarWidth, double factor);
+
+    byte reduceCounter(byte counter, boolean reset, int time = 1000);
 
     byte restoreCounter(byte counter, boolean reset, int time = 1000);
 

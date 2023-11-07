@@ -68,20 +68,48 @@ byte Timer::plusCounter(byte counter)
     return counter;
 }
 
-byte Timer::reduceCounter(byte counter, boolean &reset, int time)
+byte Timer::reduceByCounter(byte time, byte barWidth, double prewBarWidth, double factor)
+{
+    if (barWidth == byte(prewBarWidth - factor))
+    {
+        if (time > 0)
+        {
+            time--;
+
+            prewBarWidth = (prewBarWidth - factor);
+
+            if (prewBarWidth < factor)
+            {
+                factor = prewBarWidth;
+            }
+
+            // Serial.print("time: ");
+            // Serial.println(time);
+        }
+    }
+
+    return time;
+}
+
+byte Timer::reduceCounter(byte counter, boolean reset, int time)
 {
     if (reset)
     {
         // reset = false;
         temp_0 = counter;
+
+        
     }
 
     if (wait(time, reset) && temp_0 > 0)
     {
         temp_0--;
+
+        // Serial.print("time: ");
+        // Serial.println(temp_0);
     }
 
-    reset = false;
+    // reset = false;
 
     return temp_0;
 
