@@ -607,7 +607,7 @@ void EFX::autoBar(byte &time, boolean &escape, boolean increase, boolean reset)
             Serial.println("FULL");
         }
 
-        drawBox(0, 58, barWidth, 6);
+        drawBox(x_bar, y_bar, barWidth, h_bar);
 
         // Serial.print(prewBarWidth);
         // Serial.print("-----");
@@ -637,7 +637,7 @@ void EFX::autoBrickBar(byte time, boolean &escape, boolean increase, boolean res
     }
 
     byte width = blockWidth * amount;
-    drawBox(0, 58, width, 6);
+    drawBox(x_bar, y_bar, width, h_bar);
 }
 
 void EFX::escapeBar(byte amount, boolean reset)
@@ -662,7 +662,7 @@ void EFX::escapeBar(byte amount, boolean reset)
         }
     }
 
-    drawBox(0, 58, barWidth, 6);
+    drawBox(x_bar, y_bar, barWidth, h_bar);
 
     // Serial.print(barWidth);
     // Serial.print("-----");
@@ -678,7 +678,7 @@ void EFX::escapeBrickBar(byte amount, boolean reset)
     }
 
     double width = brick * ((double)amount - (double)1);
-    drawBox(0, 58, width, 6);
+    drawBox(x_bar, y_bar, width, h_bar);
 }
 
 void EFX::progressBar(byte amount, boolean reset)
@@ -696,7 +696,7 @@ void EFX::progressBar(byte amount, boolean reset)
         }
     }
 
-    drawBox(0, 58, barWidth, 6);
+    drawBox(x_bar, y_bar, barWidth, h_bar);
 }
 
 void EFX::progressBrickBar(byte amount, boolean reset)
@@ -709,7 +709,7 @@ void EFX::progressBrickBar(byte amount, boolean reset)
     }
 
     byte width = blockWidth * (tempAmount - amount);
-    drawBox(0, 58, width, 6);
+    drawBox(x_bar, y_bar, width, h_bar);
 }
 
 void EFX::sleepMode()

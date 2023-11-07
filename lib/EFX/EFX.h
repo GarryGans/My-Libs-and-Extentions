@@ -12,6 +12,10 @@ using namespace std;
 
 #define sec 1000
 
+#define x_bar 0
+#define y_bar 58
+#define h_bar 6
+
 // class EFX : public U8G2_SSD1306_128X64_NONAME_1_HW_I2C
 class EFX : public U8G2_SH1106_128X64_NONAME_1_HW_I2C
 {
