@@ -645,14 +645,14 @@ void EFX::escapeBar(byte amount, boolean reset)
     if (reset)
     {
         barWidth = screenWidth;
-        tempAmount = (double)amount - (double)1;
+        // tempAmount = (double)amount - (double)1;
 
         // Serial.println("esc");
     }
 
     // double temp = ((double)tempAmount * (double)1000 / (double)screenWidth); // constant
 
-    double temp = ((double)amount - (double)1) * (double)1000 / (double)barWidth; // acceleration
+    double temp = ((double)amount - (double)1) * (double)1000 / (double)barWidth; // acceleration better Right!!!!
 
     if (timer[5].wait(temp, reset))
     {
