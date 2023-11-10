@@ -1,5 +1,7 @@
 #include "Timer.h"
 
+// Timer timer[2];
+
 Timer::Timer()
 {
 }
@@ -13,6 +15,7 @@ boolean Timer::wait(unsigned long time, boolean reset)
     if (reset)
     {
         prew = millis();
+        Serial.println("reset");
     }
 
     if (millis() - prew >= time)
@@ -46,7 +49,7 @@ boolean Timer::wait(unsigned long time)
 
 byte Timer::minusCounter(byte counter)
 {
-    if (wait(second))
+    if (wait(defSec))
     {
         if (counter > 0)
         {
@@ -59,7 +62,7 @@ byte Timer::minusCounter(byte counter)
 
 byte Timer::plusCounter(byte counter)
 {
-    if (wait(second))
+    if (wait(defSec))
     {
         counter++;
     }
@@ -69,6 +72,14 @@ byte Timer::plusCounter(byte counter)
 
 byte Timer::reduceByCounter(byte time, byte barWidth, double prewBarWidth, double factor)
 {
+    // if (reset)
+    // {
+    //     prewBarWidth = barWidth = screenWidth;
+    //     // tempAmount = time ;
+
+    //     // factor = (double)screenWidth / (double)time;
+    // }
+
     if (barWidth == byte(prewBarWidth - factor))
     {
         if (time > 0)
@@ -76,6 +87,7 @@ byte Timer::reduceByCounter(byte time, byte barWidth, double prewBarWidth, doubl
             time--;
 
             prewBarWidth = (prewBarWidth - factor);
+            // prewBarWidth = barWidth;
 
             if (prewBarWidth < factor)
             {
@@ -131,15 +143,20 @@ byte Timer::counter(byte counter, boolean increase, boolean reset, int time)
 
 boolean Timer::ready(byte counter, boolean reset)
 {
-    return reduceCounter(counter, reset) == 0;
+    // return reduceCounter(counter, reset, defSec) == 0;
+
+    return wait(counter * defSec, reset);
 }
 
-boolean Timer::blink(unsigned long time)
+boolean Timer::blink(unsigned long time, boolean reset)
 {
-    if (wait(time))
+    if (wait(time, reset))
     {
         !_blink ? _blink = true : _blink = false;
     }
+
+    if (reset)
+        _blink = false;
 
     return _blink;
 }

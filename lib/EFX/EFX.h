@@ -22,7 +22,7 @@ class EFX : public U8G2_SH1106_128X64_NONAME_1_HW_I2C
 private:
     Timer timer[7];
     byte amount = 0;
-    // byte tempAmount = 0;
+    byte prewAmount = 0;
 
     unsigned long blinkMil = 500;
 
@@ -42,7 +42,7 @@ private:
 
     double blockWidth;
     double brick = 0;
-    
+
     double temp;
     double temp_2;
     double factor;
@@ -127,6 +127,8 @@ public:
     boolean escBar = false;
     boolean sleep = false;
 
+    byte together_X;
+
     //
     //
     //
@@ -181,6 +183,8 @@ public:
     void blinkFrame(int value, PosX pos_x, PosY pos_y, boolean tempBlock = 0, boolean dig = 0);
 
     void blinkFrame(const char *format, byte digAmount, PosX pos_x, PosY pos_y, boolean tempBlock = false);
+
+    void blinkFrame(const char *format, byte digAmount, byte x, PosY pos_y, boolean tempBlock = false);
 
     void sleepMode();
 };

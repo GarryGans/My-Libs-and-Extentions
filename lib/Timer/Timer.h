@@ -2,18 +2,15 @@
 #define TIMER_H
 
 #include <Arduino.h>
-// #include <ArduinoSTL.h>
-// #include <vector>
 
-// using namespace std;
+#define defSec 1000
 
 class Timer
 {
 private:
-    unsigned long second = 1000;
     unsigned long prew = 0;
 
-    boolean first= false;
+    boolean first = false;
 
     // boolean first_0 = false;
     // boolean first_1 = false;
@@ -32,7 +29,7 @@ public:
 
     boolean wait(unsigned long time, boolean reset);
 
-    boolean wait(unsigned long time = 1000);
+    boolean wait(unsigned long time = defSec);
 
     byte minusCounter(byte counter);
 
@@ -40,15 +37,15 @@ public:
 
     byte reduceByCounter(byte time, byte barWidth, double prewBarWidth, double factor);
 
-    byte reduceCounter(byte counter, boolean reset, int time = 1000);
+    byte reduceCounter(byte counter, boolean reset, int time);
 
-    byte restoreCounter(byte counter, boolean reset, int time = 1000);
+    byte restoreCounter(byte counter, boolean reset, int time = defSec);
 
-    byte counter(byte counter, boolean increase = false, boolean reset = false, int time = 1000);
-
-    boolean blink(unsigned long time = 500);
+    byte counter(byte counter, boolean increase = false, boolean reset = false, int time = defSec);
 
     boolean ready(byte counter, boolean reset = false);
+
+    boolean blink(unsigned long time = 500, boolean reset = false);
 };
 
 #endif

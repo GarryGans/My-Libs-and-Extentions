@@ -340,53 +340,67 @@ void EFX::frameAlign(byte W, byte H, PosX pos_x, PosY pos_y)
 
 void EFX::blinkFrame(int value, PosX pos_x, PosY pos_y, boolean tempBlock, boolean dig)
 {
-    if (!tempBlock)
+    if (timer[0].blink(blinkMil, tempBlock))
     {
-        if (timer[0].blink(blinkMil))
-        {
-            // byte width;
+        // byte width;
 
-            if (dig)
+        if (dig)
+        {
+            if (value < 10)
             {
-                if (value < 10)
-                {
-                    width = getDigWidth(value) * 2;
-                }
-                else
-                {
-                    width = getDigWidth(value);
-                }
+                width = getDigWidth(value) * 2;
             }
             else
             {
                 width = getDigWidth(value);
             }
-
-            frameAlign(width, height, pos_x, pos_y);
         }
+        else
+        {
+            width = getDigWidth(value);
+        }
+
+        frameAlign(width, height, pos_x, pos_y);
     }
 }
 
 void EFX::blinkFrame(const char *format, byte digAmount, PosX pos_x, PosY pos_y, boolean tempBlock)
 {
-    if (!tempBlock)
+    if (timer[1].blink(blinkMil, tempBlock))
     {
-        if (timer[1].blink())
-        {
-            // byte width;
+        // byte width;
 
-            width = getMaxCharWidth() * digAmount;
+        width = getMaxCharWidth() * digAmount;
 
-            setPosition(format, pos_x, pos_y);
+        setPosition(format, pos_x, pos_y);
 
-            borderW = 6;
-            borderH = 6;
+        borderW = 6;
+        borderH = 6;
 
-            width += borderW;
-            height += borderH;
+        width += borderW;
+        height += borderH;
 
-            drawFrame(x - borderW / 2, y - borderH / 2, width, height);
-        }
+        drawFrame(x - borderW / 2, y - borderH / 2, width, height);
+    }
+}
+
+void EFX::blinkFrame(const char *format, byte digAmount, byte x, PosY pos_y, boolean tempBlock)
+{
+    if (timer[1].blink(blinkMil, tempBlock))
+    {
+        // byte width;
+
+        width = getMaxCharWidth() * digAmount;
+
+        setPosition(format, pos_x, pos_y);
+
+        borderW = 12;
+        borderH = 12;
+
+        width += borderW;
+        height += borderH;
+
+        drawFrame(x - borderW / 2, 1 + y - borderH / 2, width, height);
     }
 }
 
@@ -413,6 +427,8 @@ void EFX::deepMover(stringPoint &sp)
             sp.moveLeft = true;
         }
     }
+
+    together_X = sp.move_x;
 }
 
 void EFX::padMover(stringPoint &sp)
@@ -438,6 +454,8 @@ void EFX::padMover(stringPoint &sp)
             sp.moveLeft = true;
         }
     }
+
+    together_X = sp.move_x;
 }
 
 bool EFX::moveStr::operator==(const moveStr &s) const
@@ -497,6 +515,7 @@ void EFX::moveStringDeep(const String string, PosX pos_x, PosY pos_y, byte deep_
     if (ti[id].wait(time))
     {
         deepMover(sp[id]);
+        // together_X = sp[id].deep_x;
     }
 }
 
@@ -554,19 +573,20 @@ void EFX::autoBar(byte &time, boolean &escape, boolean increase, boolean reset)
     {
         barWidth = screenWidth;
 
-        temp = (double)time * (double)sec / (double)screenWidth;
-        temp_2 = ((double)screenWidth / (double)time) * temp;
+        temp = sec;
 
         escBar = true;
     }
 
     if (escBar)
     {
-        barWidth = timer[2].reduceCounter(barWidth, reset, temp);
+        time = timer[3].reduceCounter(time, reset, temp);
 
-        time = timer[3].reduceCounter(time, reset, temp_2);
+        temp_2 = (double)time * (double)sec / (double)screenWidth;
 
-        if (barWidth == 0 && time == 0)
+        barWidth = timer[2].reduceCounter(barWidth, reset, temp_2);
+
+        if (time == 0 && barWidth == 0)
         {
             escape = true;
             escBar = false;
@@ -574,89 +594,6 @@ void EFX::autoBar(byte &time, boolean &escape, boolean increase, boolean reset)
 
         drawBox(x_bar, y_bar, barWidth, h_bar);
     }
-
-    // if (reset)
-    // {
-    //     prewBarWidth = barWidth = screenWidth;
-    //     // tempAmount = time ;
-
-    //     // temp = time * (double)sec / (double)screenWidth;
-    //     // factor = (double)screenWidth / (double)time;
-
-    //     temp = (double)time * (double)sec / (double)screenWidth;
-    //     temp_2 = ((double)screenWidth  / (double)time) * temp;
-
-    //     Serial.print("temp: ");
-    //     Serial.println(temp);
-
-    //     Serial.print("temp_2: ");
-    //     Serial.println(temp_2);
-
-    //     escBar = true;
-
-    //     // Serial.println("escBar");
-
-    //     // Serial.print("tempAmount: ");
-    //     // Serial.println(tempAmount);
-
-    //     // Serial.print("barWidth: ");
-    //     // Serial.println(barWidth);
-
-    //     // Serial.print("time: ");
-    //     // Serial.println(time);
-    // }
-
-    // if (escBar)
-    // {
-    //     // if (timer[2].wait(temp, reset))
-    //     // {
-    //     //     if (barWidth > 0)
-    //     //     {
-    //     //         barWidth--;
-
-    //     //         // Serial.print("barWidth: ");
-    //     //         // Serial.println(barWidth);
-    //     //     }
-    //     // }
-
-    //     barWidth = timer[2].reduceCounter(barWidth, reset, temp);
-
-    //     time = timer[3].reduceCounter(time, reset, temp_2);
-
-    //     // time = timer[3].reduceByCounter(time, barWidth, prewBarWidth, factor);
-
-    //     // if (barWidth == byte(prewBarWidth - factor))
-    //     // {
-    //     //     if (time > 0)
-    //     //     {
-    //     //         time--;
-
-    //     //         prewBarWidth = (prewBarWidth - factor);
-
-    //     //         if (prewBarWidth < factor)
-    //     //         {
-    //     //             factor = prewBarWidth;
-    //     //         }
-
-    //     //         // Serial.print("time: ");
-    //     //         // Serial.println(time);
-    //     //     }
-    //     // }
-
-    //     if (barWidth == 0 && time == 0)
-    //     {
-    //         escape = true;
-    //         escBar = false;
-
-    //         // Serial.println("FULL");
-    //     }
-
-    //     drawBox(x_bar, y_bar, barWidth, h_bar);
-
-    //     // Serial.print(prewBarWidth);
-    //     // Serial.print("-----");
-    //     // Serial.println(factor);
-    // }
 }
 
 void EFX::autoBrickBar(byte time, boolean &escape, boolean increase, boolean reset)
@@ -689,39 +626,40 @@ void EFX::escapeBar(byte amount, boolean reset)
     if (reset)
     {
         barWidth = screenWidth;
-        // tempAmount = (double)amount - (double)1;
 
-        // Serial.println("esc");
+        prewAmount = 0;
     }
 
-    // double temp = ((double)tempAmount * (double)1000 / (double)screenWidth); // constant
-
-    double temp = ((double)amount - (double)1) * (double)1000 / (double)barWidth; // acceleration better Right!!!!
-
-    if (timer[5].wait(temp, reset))
+    // if (barWidth != 0) // EATS 6 BYTES
+    // {
+    if (amount != prewAmount)
     {
-        if (barWidth > 0)
-        {
-            barWidth--;
-        }
+        temp = (double)amount * (double)1000 / (double)barWidth;
+
+        prewAmount = amount;
     }
+
+    barWidth = timer[5].reduceCounter(barWidth, reset, temp);
+
+    // if (amount == 0) // EATS 10 BYTES
+    // {
+    //     while (barWidth > 0)
+    //         barWidth--;
+    // }
 
     drawBox(x_bar, y_bar, barWidth, h_bar);
-
-    // Serial.print(barWidth);
-    // Serial.print("-----");
-    // Serial.println(amount);
+    // }
 }
 
 void EFX::escapeBrickBar(byte amount, boolean reset)
 {
     if (reset)
     {
-        brick = (double)screenWidth / ((double)amount - (double)1);
+        brick = (double)screenWidth / (double)amount;
         // Serial.println("escBar");
     }
 
-    double width = brick * ((double)amount - (double)1);
+    double width = brick * (double)amount;
     drawBox(x_bar, y_bar, width, h_bar);
 }
 
@@ -748,11 +686,11 @@ void EFX::progressBrickBar(byte amount, boolean reset)
     if (reset)
     {
         tempAmount = amount;
-        blockWidth = screenWidth / amount;
+        brick = (double)screenWidth / (double)amount;
         // Serial.println("escBar");
     }
 
-    byte width = blockWidth * (tempAmount - amount);
+    double width = brick * (tempAmount - (double)amount);
     drawBox(x_bar, y_bar, width, h_bar);
 }
 
