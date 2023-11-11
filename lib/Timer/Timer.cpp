@@ -53,7 +53,7 @@ boolean Timer::ready(byte counter, boolean reset)
         prew_1 = millis();
         first_1 = true;
 
-        Serial.println("ready");
+        // Serial.println("ready");
     }
 
     if (millis() - prew_1 >= counter * defSec)
