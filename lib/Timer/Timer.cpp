@@ -10,17 +10,17 @@ Timer::~Timer()
 {
 }
 
-boolean Timer::wait(unsigned long time, boolean reset)
+boolean Timer::wait(unsigned long time)
 {
-    if (reset)
+    if (!first_0)
     {
-        prew = millis();
-        Serial.println("reset");
+        prew_0 = millis();
+        first_0 = true;
     }
 
-    if (millis() - prew >= time)
+    if (millis() - prew_0 >= time)
     {
-        prew = millis();
+        first_0 = false;
 
         return true;
     }
@@ -28,19 +28,37 @@ boolean Timer::wait(unsigned long time, boolean reset)
     return false;
 }
 
-boolean Timer::wait(unsigned long time)
+boolean Timer::wait(unsigned long time, boolean reset)
 {
-    if (!first)
+    if (reset)
     {
-        first = true;
         prew = millis();
+
+        Serial.println("reset");
     }
 
     if (millis() - prew >= time)
     {
-        // prew = millis();
-        first = false;
+        prew = millis();
+        return true;
+    }
 
+    return false;
+}
+
+boolean Timer::ready(byte counter, boolean reset)
+{
+    if (!first_1 || reset)
+    {
+        prew_1 = millis();
+        first_1 = true;
+
+        Serial.println("first_1");
+    }
+
+    if (millis() - prew_1 >= counter * defSec)
+    {
+        first_1 = false;
         return true;
     }
 
@@ -104,11 +122,17 @@ byte Timer::reduceCounter(byte counter, boolean reset, int time)
     if (reset)
     {
         temp_0 = counter;
+
+        Serial.println("start");
+        Serial.println(temp_0);
     }
 
     if (wait(time, reset) && temp_0 > 0)
     {
         temp_0--;
+
+        Serial.println("begin");
+        Serial.println(temp_0);
     }
 
     return temp_0;
@@ -141,12 +165,10 @@ byte Timer::counter(byte counter, boolean increase, boolean reset, int time)
     }
 }
 
-boolean Timer::ready(byte counter, boolean reset)
-{
-    // return reduceCounter(counter, reset, defSec) == 0;
-
-    return wait(counter * defSec, reset);
-}
+// boolean Timer::ready(byte counter, boolean reset)
+// {
+//     return wait(counter * defSec, reset);
+// }
 
 boolean Timer::blink(unsigned long time, boolean reset)
 {

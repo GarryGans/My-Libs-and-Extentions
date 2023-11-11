@@ -10,10 +10,12 @@ class Timer
 private:
     unsigned long prew = 0;
 
-    boolean first = false;
+    unsigned long prew_0 = 0;
+    unsigned long prew_1 = 0;
+    // unsigned long prew_2 = 0;
 
-    // boolean first_0 = false;
-    // boolean first_1 = false;
+    boolean first_0 = false;
+    boolean first_1 = false;
     // boolean first_2 = false;
     // boolean first_3 = false;
     // boolean first_4 = false;
@@ -27,9 +29,11 @@ public:
     Timer();
     ~Timer();
 
-    boolean wait(unsigned long time, boolean reset);
-
     boolean wait(unsigned long time = defSec);
+
+    boolean wait(unsigned long time, boolean reset);
+    
+    boolean ready(byte counter, boolean reset = false);
 
     byte minusCounter(byte counter);
 
@@ -42,8 +46,6 @@ public:
     byte restoreCounter(byte counter, boolean reset, int time = defSec);
 
     byte counter(byte counter, boolean increase = false, boolean reset = false, int time = defSec);
-
-    boolean ready(byte counter, boolean reset = false);
 
     boolean blink(unsigned long time = 500, boolean reset = false);
 };
