@@ -34,7 +34,7 @@ boolean Timer::wait(unsigned long time, boolean reset)
     {
         prew = millis();
 
-        // Serial.println("reset");
+        Serial.println("reset");
     }
 
     if (millis() - prew >= time)
@@ -53,7 +53,7 @@ boolean Timer::ready(byte counter, boolean reset)
         prew_1 = millis();
         first_1 = true;
 
-        // Serial.println("first_1");
+        Serial.println("ready");
     }
 
     if (millis() - prew_1 >= counter * defSec)

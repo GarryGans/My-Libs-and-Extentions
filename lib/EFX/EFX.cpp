@@ -632,11 +632,11 @@ void EFX::escapeBar(byte amount, boolean reset)
 
     if (amount != prewAmount)
     {
-        Serial.print("amount: ");
-        Serial.println(amount);
+        // Serial.print("amount: ");
+        // Serial.println(amount);
 
-        Serial.print("barWidth: ");
-        Serial.println(barWidth);
+        // Serial.print("barWidth: ");
+        // Serial.println(barWidth);
 
         temp = (double)amount * (double)1000 / (double)barWidth;
 
@@ -655,8 +655,8 @@ void EFX::escapeBar(byte amount, boolean reset)
 
     // if (barWidth == 0) // EATS 10 BYTES
     // {
-        Serial.print("afterWidth: ");
-        Serial.println(barWidth);
+        // Serial.print("afterWidth: ");
+        // Serial.println(barWidth);
     // }
 
     drawBox(x_bar, y_bar, barWidth, h_bar);
