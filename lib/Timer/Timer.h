@@ -41,7 +41,7 @@ public:
 
     byte reduceByCounter(byte time, byte barWidth, double prewBarWidth, double factor);
 
-    byte reduceCounter(byte counter, boolean reset, int time);
+    byte reduceCounter(byte counter, boolean reset, int time = defSec);
 
     byte restoreCounter(byte counter, boolean reset, int time = defSec);
 
