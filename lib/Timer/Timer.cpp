@@ -34,7 +34,7 @@ boolean Timer::wait(unsigned long time, boolean reset)
     {
         prew = millis();
 
-        Serial.println("reset");
+        // Serial.println("reset");
     }
 
     if (millis() - prew >= time)

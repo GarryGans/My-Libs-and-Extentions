@@ -484,7 +484,7 @@ void EFX::moveStringDeep(const String string, PosX pos_x, PosY pos_y, byte deep_
         sp.push_back(spNow);
 
         Timer timer;
-        ti.push_back(timer);
+        tiDeep.push_back(timer);
 
         id = strMov.size() - 1;
     }
@@ -512,7 +512,7 @@ void EFX::moveStringDeep(const String string, PosX pos_x, PosY pos_y, byte deep_
     setCursor(sp[id].move_x, y);
     print(string);
 
-    if (ti[id].wait(time))
+    if (tiDeep[id].wait(time))
     {
         deepMover(sp[id]);
         // together_X = sp[id].deep_x;
@@ -540,7 +540,7 @@ void EFX::moveStringPad(const String string, PosX pos_x, PosY pos_y, byte paddin
         sp.push_back(spNow);
 
         Timer timer;
-        ti.push_back(timer);
+        tiPad.push_back(timer);
 
         id = strMov.size() - 1;
     }
@@ -561,7 +561,7 @@ void EFX::moveStringPad(const String string, PosX pos_x, PosY pos_y, byte paddin
     setCursor(sp[id].move_x, y);
     print(string);
 
-    if (ti[id].wait(time))
+    if (tiPad[id].wait(time))
     {
         padMover(sp[id]);
     }

@@ -72,7 +72,8 @@ private:
 
     vector<stringPoint> sp;
 
-    vector<Timer> ti;
+    vector<Timer> tiPad;
+    vector<Timer> tiDeep;
 
     byte setX;
     byte setY;
