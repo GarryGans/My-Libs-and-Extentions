@@ -186,7 +186,7 @@ void EFX::setHeight(const uint8_t *font)
     {
         height = 14;
     }
-    else if (font == u8g2_font_crox5tb_tf || font == u8g2_font_inb16_mf || font == u8g2_font_inb16_mf)
+    else if (font == u8g2_font_crox5tb_tf || font == u8g2_font_inb16_mf)
     {
         height = 16;
     }
@@ -400,6 +400,8 @@ void EFX::blinkFrame(const char *format, byte digAmount, byte x, PosY pos_y, boo
         width += borderW;
         height += borderH;
 
+        // drawFrame(x - borderW / 2,  y - borderH / 2, width, height);
+        
         drawFrame(x - borderW / 2, 1 + y - borderH / 2, width, height);
     }
 }
