@@ -23,7 +23,7 @@ private:
     Timer timer[7];
     byte amount = 0;
     byte prewAmount = 0;
-    boolean first_0 = false;
+    // boolean first_0 = false;
 
     unsigned long blinkMil = 500;
 
