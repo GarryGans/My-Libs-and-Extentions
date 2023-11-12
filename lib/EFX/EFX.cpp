@@ -634,8 +634,8 @@ void EFX::escapeBar(byte amount, boolean reset)
 
     if (amount != prewAmount)
     {
-        // Serial.print("amount: ");
-        // Serial.println(amount);
+        Serial.print("amount: ");
+        Serial.println(amount);
 
         // Serial.print("barWidth: ");
         // Serial.println(barWidth);

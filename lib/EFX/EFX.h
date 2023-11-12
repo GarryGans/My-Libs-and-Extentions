@@ -23,6 +23,7 @@ private:
     Timer timer[7];
     byte amount = 0;
     byte prewAmount = 0;
+    boolean first_0 = false;
 
     unsigned long blinkMil = 500;
 
@@ -175,7 +176,7 @@ public:
     void autoBar(byte &time, boolean &escape, boolean increase = false, boolean reset = false);
     void autoBrickBar(byte time, boolean &escape, boolean increase = false, boolean reset = false);
 
-    void escapeBar(byte amount, boolean reset);
+    void escapeBar(byte amount, boolean reset = false);
     void escapeBrickBar(byte amount, boolean reset);
 
     void progressBar(byte amount, boolean reset);

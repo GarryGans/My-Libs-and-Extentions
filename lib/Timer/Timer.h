@@ -16,7 +16,7 @@ private:
 
     boolean first_0 = false;
     boolean first_1 = false;
-    // boolean first_2 = false;
+    boolean first_2 = false;
     // boolean first_3 = false;
     // boolean first_4 = false;
 
@@ -41,7 +41,7 @@ public:
 
     byte reduceByCounter(byte time, byte barWidth, double prewBarWidth, double factor);
 
-    byte reduceCounter(byte counter, boolean reset, int time = defSec);
+    byte reduceCounter(byte counter, boolean reset = false, int time = defSec);
 
     byte restoreCounter(byte counter, boolean reset, int time = defSec);
 
