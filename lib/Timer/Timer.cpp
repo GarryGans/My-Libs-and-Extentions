@@ -158,6 +158,9 @@ byte Timer::restoreCounter(byte counter, boolean reset, int time)
 
     if (wait(time, reset) && temp_1 < counter)
     {
+        // Serial.print("time++: ");
+        // Serial.println(time);
+
         temp_1++;
 
         if (temp_1 == counter)
