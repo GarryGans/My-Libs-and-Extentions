@@ -23,7 +23,8 @@ private:
     Timer timer[7];
     byte amount = 0;
     byte prewAmount = 0;
-    // boolean first_0 = false;
+    boolean first_0 = false;
+    boolean first_1 = false;
 
     unsigned long blinkMil = 500;
 
@@ -179,8 +180,10 @@ public:
     void escapeBar(byte amount, boolean reset = false);
     void escapeBrickBar(byte amount, boolean reset);
 
-    void progressBar(byte amount, boolean reset);
+    void progressBar(byte amount, boolean reset = false);
     void progressBrickBar(byte amount, boolean reset);
+
+    void bar(byte amount, boolean progress = false, boolean reset = false);
 
     void blinkFrame(int value, PosX pos_x, PosY pos_y, boolean tempBlock = 0, boolean dig = 0);
 

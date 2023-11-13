@@ -119,12 +119,12 @@ byte Timer::reduceByCounter(byte time, byte barWidth, double prewBarWidth, doubl
 
 byte Timer::reduceCounter(byte counter, boolean reset, int time)
 {
-    if (reset || !first_2)
+    if (reset || !count_0)
     {
-        reset = first_2 = true;
+        reset = count_0 = true;
         temp_0 = counter;
 
-        Serial.print("start: ");
+        Serial.print("start--: ");
         Serial.println(temp_0);
     }
 
@@ -134,7 +134,7 @@ byte Timer::reduceCounter(byte counter, boolean reset, int time)
 
         if (temp_0 == 0)
         {
-            first_2 = false;
+            count_0 = false;
         }
         
 
@@ -147,14 +147,23 @@ byte Timer::reduceCounter(byte counter, boolean reset, int time)
 
 byte Timer::restoreCounter(byte counter, boolean reset, int time)
 {
-    if (reset)
+    if (reset || !count_1)
     {
+        reset = count_1 = true;
         temp_1 = 0;
+
+        Serial.print("start++: ");
+        Serial.println(temp_1);
     }
 
     if (wait(time, reset) && temp_1 < counter)
     {
         temp_1++;
+
+        if (temp_1 == counter)
+        {
+            count_1 = false;
+        }
     }
 
     return temp_1;

@@ -401,7 +401,7 @@ void EFX::blinkFrame(const char *format, byte digAmount, byte x, PosY pos_y, boo
         height += borderH;
 
         // drawFrame(x - borderW / 2,  y - borderH / 2, width, height);
-        
+
         drawFrame(x - borderW / 2, 1 + y - borderH / 2, width, height);
     }
 }
@@ -609,7 +609,7 @@ void EFX::autoBrickBar(byte time, boolean &escape, boolean increase, boolean res
 
     if (escBar)
     {
-        amount = timer[4].counter(time, increase, reset, time);
+        amount = timer[4].restoreCounter(time, reset, time);
 
         if ((increase && amount == time) || (!increase && amount == 0))
         {
@@ -625,11 +625,15 @@ void EFX::autoBrickBar(byte time, boolean &escape, boolean increase, boolean res
 
 void EFX::escapeBar(byte amount, boolean reset)
 {
-    if (reset)
+    if (reset || !first_0)
     {
         barWidth = screenWidth;
 
         prewAmount = 0;
+
+        first_0 = true;
+
+        Serial.println("esc start");
     }
 
     if (amount != prewAmount)
@@ -637,31 +641,41 @@ void EFX::escapeBar(byte amount, boolean reset)
         Serial.print("amount: ");
         Serial.println(amount);
 
-        // Serial.print("barWidth: ");
-        // Serial.println(barWidth);
+        Serial.print("barWidth: ");
+        Serial.println(barWidth);
 
         temp = (double)amount * (double)1000 / (double)barWidth;
 
         prewAmount = amount;
     }
 
-    barWidth = timer[5].reduceCounter(barWidth, reset, temp);
+    if (barWidth != 0)
+    {
+        barWidth = timer[5].reduceCounter(barWidth, reset, temp);
 
-    // if (amount == 0) // EATS 10 BYTES
-    // {
-    //     // while (barWidth > 0)
-    //     //     barWidth--;
-    //     Serial.print("amount: ");
-    //     Serial.println(amount);
-    // }
+        // if (amount == 0) // EATS 10 BYTES
+        // {
+        //     // while (barWidth > 0)
+        //     //     barWidth--;
+        //     Serial.print("amount: ");
+        //     Serial.println(amount);
+        // }
 
-    // if (barWidth == 0) // EATS 10 BYTES
-    // {
-        // Serial.print("afterWidth: ");
-        // Serial.println(barWidth);
-    // }
+        drawBox(x_bar, y_bar, barWidth, h_bar);
 
-    drawBox(x_bar, y_bar, barWidth, h_bar);
+        // byte progress = screenWidth - barWidth;
+        // drawBox(x_bar, y_bar, screenWidth - barWidth, h_bar);
+
+        if (barWidth == 0)
+        {
+            // first_0 = false;
+            Serial.print("afterWidth: ");
+            Serial.println(barWidth);
+
+            // Serial.print("progress: ");
+            // Serial.println(progress);
+        }
+    }
 }
 
 void EFX::escapeBrickBar(byte amount, boolean reset)
@@ -678,20 +692,43 @@ void EFX::escapeBrickBar(byte amount, boolean reset)
 
 void EFX::progressBar(byte amount, boolean reset)
 {
-    if (reset)
+    if (reset && !first_1)
     {
         barWidth = 0;
+
+        prewAmount = 0;
+
+        first_1 = true;
+
+        Serial.println("bar start");
     }
 
-    if (timer[6].wait(amount * 1000 / screenWidth))
+    if (amount != prewAmount)
     {
-        if (barWidth < screenWidth)
+        Serial.print("amount: ");
+        Serial.println(amount);
+
+        Serial.print("barWidth: ");
+        Serial.println(barWidth);
+
+        temp = (double)amount * (double)1000 / (double)screenWidth - (double)barWidth;
+
+        prewAmount = amount;
+    }
+
+    if (barWidth != screenWidth)
+    {
+        barWidth = timer[6].restoreCounter(screenWidth, reset, temp);
+
+        drawBox(x_bar, y_bar, barWidth, h_bar);
+
+        if (barWidth == screenWidth)
         {
-            barWidth++;
+            // first_0 = false;
+            Serial.print("afterWidth: ");
+            Serial.println(barWidth);
         }
     }
-
-    drawBox(x_bar, y_bar, barWidth, h_bar);
 }
 
 void EFX::progressBrickBar(byte amount, boolean reset)
@@ -705,6 +742,69 @@ void EFX::progressBrickBar(byte amount, boolean reset)
 
     double width = brick * (tempAmount - (double)amount);
     drawBox(x_bar, y_bar, width, h_bar);
+}
+
+void EFX::bar(byte amount, boolean progress, boolean reset)
+{
+    if (reset || !first_0)
+    {
+        barWidth = screenWidth;
+
+        prewAmount = 0;
+
+        first_0 = true;
+
+        Serial.println("esc start");
+    }
+
+    if (amount != prewAmount)
+    {
+        Serial.print("amount: ");
+        Serial.println(amount);
+
+        Serial.print("barWidth: ");
+        Serial.println(barWidth);
+
+        temp = (double)amount * (double)1000 / (double)barWidth;
+
+        prewAmount = amount;
+    }
+
+    if (barWidth != 0)
+    {
+        barWidth = timer[5].reduceCounter(barWidth, reset, temp);
+
+        // if (amount == 0) // EATS 10 BYTES
+        // {
+        //     // while (barWidth > 0)
+        //     //     barWidth--;
+        //     Serial.print("amount: ");
+        //     Serial.println(amount);
+        // }
+
+        byte bar;
+
+        if (progress)
+        {
+            bar = screenWidth - barWidth;
+        }
+        else
+        {
+            bar = barWidth;
+        }
+
+        drawBox(x_bar, y_bar, bar, h_bar);
+
+        if (barWidth == 0)
+        {
+            // first_0 = false;
+            Serial.print("afterWidth: ");
+            Serial.println(barWidth);
+
+            // Serial.print("progress: ");
+            // Serial.println(progress);
+        }
+    }
 }
 
 void EFX::sleepMode()

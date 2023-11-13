@@ -16,9 +16,12 @@ private:
 
     boolean first_0 = false;
     boolean first_1 = false;
-    boolean first_2 = false;
+    // boolean first_2 = false;
     // boolean first_3 = false;
     // boolean first_4 = false;
+
+    boolean count_0 = false;
+    boolean count_1 = false;
 
     boolean _blink = false;
 
