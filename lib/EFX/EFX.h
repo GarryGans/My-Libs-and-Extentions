@@ -177,10 +177,8 @@ public:
     void autoBar(byte &time, boolean &escape, boolean increase = false, boolean reset = false);
     void autoBrickBar(byte time, boolean &escape, boolean increase = false, boolean reset = false);
 
-    void escapeBar(byte amount, boolean reset = false);
     void escapeBrickBar(byte amount, boolean reset);
 
-    void progressBar(byte amount, boolean reset = false);
     void progressBrickBar(byte amount, boolean reset);
 
     void bar(byte amount, boolean progress = false, boolean reset = false);

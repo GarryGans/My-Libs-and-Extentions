@@ -593,7 +593,6 @@ void EFX::autoBar(byte &time, boolean &escape, boolean increase, boolean reset)
             escape = true;
             escBar = false;
         }
-
     }
 
     drawBox(x_bar, y_bar, barWidth, h_bar);
@@ -625,65 +624,6 @@ void EFX::autoBrickBar(byte time, boolean &escape, boolean increase, boolean res
     drawBox(x_bar, y_bar, width, h_bar);
 }
 
-void EFX::escapeBar(byte amount, boolean reset)
-{
-    if (reset || !first_0)
-    {
-        barWidth = screenWidth;
-
-        prewAmount = 0;
-
-        first_0 = true;
-
-        //Serial.println("esc start");
-    }
-
-    if (amount != prewAmount)
-    {
-        //Serial.print("amount: ");
-        //Serial.println(amount);
-
-        //Serial.print("barWidth: ");
-        //Serial.println(barWidth);
-
-        temp = (double)amount * (double)1000 / (double)barWidth;
-
-        //Serial.print("temp--: ");
-        //Serial.println(temp);
-
-        prewAmount = amount;
-    }
-
-    if (barWidth != 0)
-    {
-        barWidth = timer[5].reduceCounter(barWidth, reset, temp);
-
-        if (amount == 0) // EATS 10 BYTES
-        {
-            while (barWidth > 0)
-                barWidth--;
-            // //Serial.print("amount: ");
-            // //Serial.println(amount);
-        }
-
-
-        // byte progress = screenWidth - barWidth;
-        // drawBox(x_bar, y_bar, screenWidth - barWidth, h_bar);
-
-        if (barWidth == 0)
-        {
-            // first_0 = false;
-            //Serial.print("afterWidth: ");
-            //Serial.println(barWidth);
-
-            // //Serial.print("progress: ");
-            // //Serial.println(progress);
-        }
-    }
-
-    drawBox(x_bar, y_bar, barWidth, h_bar);
-}
-
 void EFX::escapeBrickBar(byte amount, boolean reset)
 {
     if (reset)
@@ -694,58 +634,6 @@ void EFX::escapeBrickBar(byte amount, boolean reset)
 
     double width = brick * (double)amount;
     drawBox(x_bar, y_bar, width, h_bar);
-}
-
-void EFX::progressBar(byte amount, boolean reset)
-{
-    if (reset && !first_1)
-    {
-        barWidth = 0;
-
-        prewAmount = 0;
-
-        first_1 = true;
-
-        //Serial.println("bar start");
-    }
-
-    if (amount != prewAmount)
-    {
-        //Serial.print("amount: ");
-        //Serial.println(amount);
-
-        //Serial.print("barWidth: ");
-        //Serial.println(barWidth);
-
-        temp = (double)amount * (double)1000 / ((double)screenWidth - (double)barWidth);
-
-        //Serial.print("temp++: ");
-        //Serial.println(temp);
-
-        prewAmount = amount;
-    }
-
-    if (barWidth != screenWidth)
-    {
-        barWidth = timer[6].restoreCounter(screenWidth, reset, temp);
-
-        if (amount == 0) // EATS 10 BYTES
-        {
-            while (barWidth > 0)
-                barWidth--;
-
-            //Serial.println("amount == 0");
-        }
-
-        if (barWidth == screenWidth)
-        {
-            // first_0 = false;
-            //Serial.print("afterWidth: ");
-            //Serial.println(barWidth);
-        }
-    }
-
-    drawBox(x_bar, y_bar, barWidth, h_bar);
 }
 
 void EFX::progressBrickBar(byte amount, boolean reset)
@@ -763,29 +651,18 @@ void EFX::progressBrickBar(byte amount, boolean reset)
 
 void EFX::bar(byte amount, boolean progress, boolean reset)
 {
-    if ((reset || !first_0) && amount !=0)
+    if ((reset || !first_0) && amount != 0)
     {
         barWidth = screenWidth;
 
         prewAmount = 0;
 
         first_0 = true;
-
-        Serial.println("esc start");
     }
 
     if (amount != prewAmount)
     {
-        // Serial.print("amount: ");
-        // Serial.println(amount);
-
-        // Serial.print("barWidth: ");
-        // Serial.println(barWidth);
-
         temp = (double)amount * (double)1000 / (double)barWidth;
-
-        //Serial.print("temp bar: ");
-        //Serial.println(temp);
 
         prewAmount = amount;
     }
@@ -794,20 +671,15 @@ void EFX::bar(byte amount, boolean progress, boolean reset)
     {
         barWidth = timer[5].reduceCounter(screenWidth, reset, temp);
 
-        if (amount == 0) 
+        if (amount == 0)
         {
             while (barWidth > 0)
-                // barWidth--;
                 barWidth = timer[5].reduceCounter(screenWidth, reset, temp);
-
-            Serial.println("amount == 0 barWidth--");
         }
 
         if (barWidth == 0)
         {
             first_0 = false;
-        Serial.print("finishWidth: ");
-        Serial.println(barWidth);
         }
     }
 
