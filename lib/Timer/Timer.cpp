@@ -135,10 +135,12 @@ byte Timer::reduceCounter(byte counter, boolean reset, int time)
         if (temp_0 == 0)
         {
             count_0 = false;
+            Serial.print("count_0 false: ");
+            Serial.println(counter);
         }
         
 
-        // Serial.print("begin: ");
+        // Serial.print("begin--: ");
         // Serial.println(temp_0);
     }
 
